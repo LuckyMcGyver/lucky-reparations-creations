@@ -1,0 +1,34 @@
+backend:
+  name: git-gateway
+  branch: main
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+site_url: "https://lucky-reparations-creations.netlify.app"
+display_url: "https://lucky-reparations-creations.netlify.app"
+logo_url: "/assets/logo.png"
+collections:
+  - name: "realisations"
+    label: "Réalisations"
+    files:
+      - label: "Galerie"
+        name: "galerie"
+        file: "content/realisations.json"
+        fields:
+          - label: "Réalisations"
+            name: "body"
+            widget: "list"
+            fields:
+              - {label: "Titre", name: "title", widget: "string"}
+              - label: "Catégorie"
+                name: "category"
+                widget: "select"
+                options:
+                  - {label: "Réparations", value: "reparations"}
+                  - {label: "Impression 3D", value: "impression3d"}
+                  - {label: "Gravure laser", value: "laser"}
+                  - {label: "Découpe laser", value: "decoupe"}
+                  - {label: "Créations", value: "creations"}
+              - {label: "Icône", name: "icon", widget: "string", required: false}
+              - {label: "Description", name: "description", widget: "text"}
+              - {label: "Image", name: "image", widget: "image"}
+              - {label: "Mettre en avant", name: "featured", widget: "boolean", required: false, default: false}
