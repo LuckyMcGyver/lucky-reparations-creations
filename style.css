@@ -312,3 +312,8 @@
 .gallery-item { cursor: zoom-in !important; }
 .gallery-item * { pointer-events: none; }
 .lightbox button, .lightbox img, .lightbox-caption { pointer-events: auto; }
+
+/* V7.4 migration propre */
+.gallery-item { cursor: zoom-in !important; }
+.gallery-item * { pointer-events: none; }
+.lightbox button, .lightbox img, .lightbox-caption { pointer-events: auto; }

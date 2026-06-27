@@ -75,7 +75,7 @@ function projectCard(r, index) {
 function normalizePhotos(p) {
   return [{photo:p.image, caption:'Image principale'}].concat((p.photos || []).map(ph => {
     if (typeof ph === "string") return {photo: ph, caption: ""};
-    return ph;
+    return ph || {};
   })).filter(ph => ph.photo);
 }
 function prepareProject(index) {

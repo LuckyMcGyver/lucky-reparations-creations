@@ -1,14 +1,12 @@
-Lucky Réparations & Créations — V7.3 CMS compatible
+Lucky Réparations & Créations — V7.4 Migration propre
 
-But :
-- corriger le problème "No images_section" ;
-- garder les réalisations existantes sans les écraser ;
-- revenir à un formulaire CMS compatible avec les anciennes réalisations ;
-- garder la séparation pratique : image, photos, description, infos ;
-- clic sur la carte = ouverture de la photo en plein écran.
-
-Important :
-Cette archive ne contient PAS content/realisations.json afin de ne pas écraser tes réalisations existantes.
+Ce que cette version corrige :
+- supprime définitivement le problème "No images_section" dans le CMS ;
+- migre les 4 réalisations actuelles vers un format simple et stable ;
+- conserve Lampe cheval et ses photos ;
+- conserve la séparation pratique Image / Description / Infos dans l'administration via les libellés ;
+- clic sur une carte = ouverture de l'image en plein écran ;
+- la galerie reste compatible avec les anciennes et nouvelles données.
 
 Installation :
 1. Décompresser l'archive.
