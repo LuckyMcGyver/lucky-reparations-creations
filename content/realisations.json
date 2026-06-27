@@ -1,5 +1,28 @@
-[
- {"title":"Diagnostic et réparation","category":"reparations","icon":"🔧","description":"Recherche de panne et remise en état selon faisabilité.","image":"/assets/hero.png","featured":true},
- {"title":"Pièce technique imprimée en 3D","category":"impression3d","icon":"🖨️","description":"Fabrication de pièces sur mesure ou devenues introuvables.","image":"/assets/logo.png","featured":true},
- {"title":"Gravure laser personnalisée","category":"laser","icon":"🔥","description":"Personnalisation d'objets, plaques, cadeaux et trophées.","image":"/assets/hero.png","featured":true}
-]
+{
+  "body": [
+    {
+      "title": "Diagnostic et réparation",
+      "category": "reparations",
+      "icon": "🔧",
+      "description": "Recherche de panne et remise en état selon faisabilité.",
+      "image": "/assets/hero.png",
+      "featured": true
+    },
+    {
+      "title": "Pièce technique imprimée en 3D",
+      "category": "impression3d",
+      "icon": "🖨️",
+      "description": "Fabrication de pièces sur mesure ou devenues introuvables.",
+      "image": "/assets/logo.png",
+      "featured": true
+    },
+    {
+      "title": "Gravure laser personnalisée",
+      "category": "laser",
+      "icon": "🔥",
+      "description": "Personnalisation d'objets, plaques, cadeaux et trophées.",
+      "image": "/assets/hero.png",
+      "featured": true
+    }
+  ]
+}

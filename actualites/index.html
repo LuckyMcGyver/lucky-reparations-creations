@@ -1,4 +1,22 @@
 <!doctype html><html lang="fr-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="google-site-verification" content="1x1FHLzYrqG6f4obSSifFVpXf44gHq4O3ZmsI2_jiWU"><title>Actualités | Lucky Réparations & Créations</title><meta name="description" content="Actualités et cas d’atelier Lucky Réparations & Créations."><meta name="robots" content="index, follow"><link rel="icon" href="/assets/logo.png"><link rel="stylesheet" href="/style.css"><meta property="og:title" content="Actualités | Lucky Réparations & Créations"><meta property="og:description" content="Actualités et cas d’atelier Lucky Réparations & Créations."><meta property="og:image" content="https://lucky-reparations-creations.netlify.app/assets/hero.png"></head><body>
 <header><div class="container nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="Logo"><span>Lucky Réparations & Créations<small>Mouscron • Tournai et environs</small></span></a><nav class="links" id="menu"><a href="/">Accueil</a><a href="/services/">Services</a><a href="/galerie/">Galerie</a><a href="/actualites/">Actualités</a><a href="/avis/">Avis</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a class="cta" href="/devis/">Demander un devis</a></nav><button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('open')">Menu</button></div></header>
 <main><section class="page-hero"><div class="container"><h1>Actualités</h1><p>Cas d’atelier, projets et nouvelles réalisations.</p></div></section><section><div class="container grid services"><article class="card"><h3>Ouverture du site</h3><p><strong>2026-06-25</strong></p><p>Le site présente les services, la galerie, les demandes de devis et les réalisations.</p></article></div></section></main>
-<footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer><script src="/app.js"></script></body></html>
+<footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer><script src="/app.js"></script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", function(user) {
+      if (!user && window.location.hash && window.location.hash.includes("_token=")) {
+        window.netlifyIdentity.open();
+      }
+    });
+    window.netlifyIdentity.on("login", function() {
+      document.location.href = "/admin/";
+    });
+    window.netlifyIdentity.on("logout", function() {
+      document.location.href = "/";
+    });
+  }
+</script>
+
+</body></html>

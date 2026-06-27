@@ -1,4 +1,22 @@
 <!doctype html><html lang="fr-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="google-site-verification" content="1x1FHLzYrqG6f4obSSifFVpXf44gHq4O3ZmsI2_jiWU"><title>Galerie | Lucky Réparations & Créations</title><meta name="description" content="Galerie de réalisations à Mouscron et Tournai."><meta name="robots" content="index, follow"><link rel="icon" href="/assets/logo.png"><link rel="stylesheet" href="/style.css"><meta property="og:title" content="Galerie | Lucky Réparations & Créations"><meta property="og:description" content="Galerie de réalisations à Mouscron et Tournai."><meta property="og:image" content="https://lucky-reparations-creations.netlify.app/assets/hero.png"></head><body>
 <header><div class="container nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="Logo"><span>Lucky Réparations & Créations<small>Mouscron • Tournai et environs</small></span></a><nav class="links" id="menu"><a href="/">Accueil</a><a href="/services/">Services</a><a href="/galerie/">Galerie</a><a href="/actualites/">Actualités</a><a href="/avis/">Avis</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a class="cta" href="/devis/">Demander un devis</a></nav><button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('open')">Menu</button></div></header>
 <main><section class="page-hero"><div class="container"><h1>Galerie de réalisations</h1><p>Réparations, impression 3D, gravure laser, découpe laser et créations personnalisées.</p></div></section><section><div class="container"><div class="filters"><button class="filter-btn active" data-filter="all">Tous</button><button class="filter-btn" data-filter="reparations">🔧 Réparations</button><button class="filter-btn" data-filter="impression3d">🖨️ Impression 3D</button><button class="filter-btn" data-filter="laser">🔥 Laser</button><button class="filter-btn" data-filter="decoupe">✂️ Découpe</button><button class="filter-btn" data-filter="creations">🎨 Créations</button></div><div class="grid gallery" id="galleryGrid"></div></div></section></main>
-<footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer><script src="/app.js"></script></body></html>
+<footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer><script src="/app.js"></script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", function(user) {
+      if (!user && window.location.hash && window.location.hash.includes("_token=")) {
+        window.netlifyIdentity.open();
+      }
+    });
+    window.netlifyIdentity.on("login", function() {
+      document.location.href = "/admin/";
+    });
+    window.netlifyIdentity.on("logout", function() {
+      document.location.href = "/";
+    });
+  }
+</script>
+
+</body></html>

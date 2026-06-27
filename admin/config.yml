@@ -1,11 +1,16 @@
 backend:
   name: git-gateway
   branch: main
+
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
+
 site_url: "https://lucky-reparations-creations.netlify.app"
 display_url: "https://lucky-reparations-creations.netlify.app"
 logo_url: "/assets/logo.png"
+
+publish_mode: editorial_workflow
+
 collections:
   - name: "realisations"
     label: "Réalisations"
@@ -17,6 +22,7 @@ collections:
           - label: "Réalisations"
             name: "body"
             widget: "list"
+            summary: "{{fields.title}}"
             fields:
               - {label: "Titre", name: "title", widget: "string"}
               - label: "Catégorie"
@@ -31,4 +37,5 @@ collections:
               - {label: "Icône", name: "icon", widget: "string", required: false}
               - {label: "Description", name: "description", widget: "text"}
               - {label: "Image", name: "image", widget: "image"}
-              - {label: "Mettre en avant", name: "featured", widget: "boolean", required: false, default: false}
+              - {label: "Date", name: "date", widget: "datetime", required: false}
+              - {label: "Mettre à la une", name: "featured", widget: "boolean", required: false, default: false}

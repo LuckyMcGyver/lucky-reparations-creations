@@ -1,12 +1,17 @@
-Lucky Réparations & Créations — V6 finale
+Lucky Réparations & Créations — V6.1 correctif CMS
 
-Contenu :
-- Site complet multi-pages
-- Galerie dynamique
-- Admin Decap CMS (/admin/)
-- Formulaire de devis avec fichiers
-- SEO Google + sitemap + robots.txt
-- Mouscron avant Tournai
+Corrections :
+- prise en charge correcte des liens d'invitation / récupération Netlify Identity ;
+- redirection automatique vers /admin/ après connexion ;
+- structure content/realisations.json compatible Decap CMS ;
+- app.js compatible avec les deux formats JSON ;
+- configuration Decap CMS conservée avec git-gateway.
 
-Déploiement simple : envoyer tout le contenu de ce dossier dans GitHub, puis connecter GitHub à Netlify.
-Pour activer l'administration : Netlify Identity + Git Gateway.
+Installation :
+1. Envoyer tout le contenu de ce dossier dans GitHub.
+2. Commit changes.
+3. Netlify redéploiera automatiquement.
+4. Ouvrir https://lucky-reparations-creations.netlify.app/admin/
+5. Se connecter avec Netlify Identity.
+
+Git Gateway et Identity doivent rester activés dans Netlify.

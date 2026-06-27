@@ -1,4 +1,21 @@
-async function loadRealisations(){const r=await fetch('/content/realisations.json',{cache:'no-store'});return await r.json()}
-function setupFilters(){document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const f=btn.dataset.filter;document.querySelectorAll('.gallery-item').forEach(i=>i.style.display=(f==='all'||i.dataset.cat===f)?'block':'none')}))}
-async function renderGallery(){const grid=document.getElementById('galleryGrid');if(!grid)return;const data=await loadRealisations();grid.innerHTML=data.map(r=>`<article class="gallery-item" data-cat="${r.category}"><img src="${r.image}" alt="${r.title}"><div>${r.icon||''} ${r.title}<br><small>${r.description||''}</small></div></article>`).join('');setupFilters()}
-document.addEventListener('DOMContentLoaded',renderGallery)
+async function loadRealisations(){
+  const r = await fetch('/content/realisations.json', {cache:'no-store'});
+  const data = await r.json();
+  return Array.isArray(data) ? data : (data.body || data.realisations || []);
+}
+function setupFilters(){
+  document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.gallery-item').forEach(i=>i.style.display=(f==='all'||i.dataset.cat===f)?'block':'none');
+  }));
+}
+async function renderGallery(){
+  const grid=document.getElementById('galleryGrid');
+  if(!grid)return;
+  const data=await loadRealisations();
+  grid.innerHTML=data.map(r=>`<article class="gallery-item" data-cat="${r.category}"><img src="${r.image}" alt="${r.title}"><div>${r.icon||''} ${r.title}<br><small>${r.description||''}</small></div></article>`).join('');
+  setupFilters();
+}
+document.addEventListener('DOMContentLoaded',renderGallery);
