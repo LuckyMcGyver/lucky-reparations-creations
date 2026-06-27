@@ -26,6 +26,14 @@
       "image": "/assets/hero.png",
       "featured": true,
       "details": ""
+    },
+    {
+      "featured": true,
+      "title": "Lampe cheval",
+      "category": "creations",
+      "description": "Tête de cheval surmonté d'un abat-jour assorti",
+      "image": "/assets/uploads/img_20210615_103505.jpg",
+      "date": "2025-02-27T09:06:00.000+01:00"
     }
   ]
 }
