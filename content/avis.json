@@ -1,0 +1,14 @@
+{
+  "body": [
+    {
+      "name": "Client local",
+      "rating": 5,
+      "text": "Travail soigné, contact clair et solution adaptée."
+    },
+    {
+      "name": "Projet personnalisé",
+      "rating": 5,
+      "text": "Création sur mesure réalisée avec sérieux."
+    }
+  ]
+}

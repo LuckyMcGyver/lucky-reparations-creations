@@ -6,7 +6,8 @@
       "icon": "🔧",
       "description": "Recherche de panne et remise en état selon faisabilité.",
       "image": "/assets/hero.png",
-      "featured": true
+      "featured": true,
+      "details": ""
     },
     {
       "title": "Pièce technique imprimée en 3D",
@@ -14,7 +15,8 @@
       "icon": "🖨️",
       "description": "Fabrication de pièces sur mesure ou devenues introuvables.",
       "image": "/assets/logo.png",
-      "featured": true
+      "featured": true,
+      "details": ""
     },
     {
       "title": "Gravure laser personnalisée",
@@ -22,7 +24,8 @@
       "icon": "🔥",
       "description": "Personnalisation d'objets, plaques, cadeaux et trophées.",
       "image": "/assets/hero.png",
-      "featured": true
+      "featured": true,
+      "details": ""
     }
   ]
 }
