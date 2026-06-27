@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Back-office | Lucky Réparations & Créations</title>
+<link rel="icon" href="/assets/logo.png">
+<link rel="stylesheet" href="/backoffice/backoffice.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><img src="/assets/logo.png"><div><strong>Lucky Réparations & Créations</strong><span>Back-office simple</span></div></div>
+  <nav>
+    <a href="/" target="_blank">Voir le site</a>
+    <button id="loadBtn">Charger le site</button>
+    <button id="exportBtn" class="primary">Exporter realisations.json</button>
+  </nav>
+</header>
+
+<main class="app">
+  <aside class="side">
+    <button class="tab active" data-view="dashboard">Accueil</button>
+    <button class="tab" data-view="realisations">Réalisations</button>
+    <button class="tab" data-view="publish">Publier</button>
+  </aside>
+
+  <section class="main">
+    <div class="view active" id="dashboard">
+      <h1>Tableau de bord</h1>
+      <p>Gestion simple des réalisations, sans toucher au code.</p>
+      <div class="stats">
+        <div><strong id="countTotal">0</strong><span>Réalisations</span></div>
+        <div><strong id="countFeatured">0</strong><span>À la une</span></div>
+        <div><strong id="countPhotos">0</strong><span>Photos</span></div>
+      </div>
+      <div class="notice">
+        <h2>Important</h2>
+        <p>Cette interface fonctionne gratuitement. Elle prépare le fichier <b>content/realisations.json</b>. Pour publier, il faut exporter ce fichier puis le remplacer dans GitHub.</p>
+      </div>
+    </div>
+
+    <div class="view" id="realisations">
+      <div class="titlebar"><div><h1>Réalisations</h1><p>Ajout, modification et suppression.</p></div><button id="newBtn" class="primary">+ Nouvelle réalisation</button></div>
+      <div class="layout">
+        <div id="list" class="list"></div>
+        <form id="form" class="editor">
+          <h2 id="formTitle">Nouvelle réalisation</h2>
+
+          <fieldset><legend>📷 Image</legend>
+            <label>Image principale</label><input id="image" placeholder="/assets/uploads/photo.jpg">
+            <p class="hint">Envoie d'abord la photo dans GitHub → assets/uploads, puis indique son chemin ici.</p>
+            <label>Photos supplémentaires</label><div id="photos"></div><button type="button" id="addPhotoBtn">+ Ajouter une photo</button>
+          </fieldset>
+
+          <fieldset><legend>📝 Description</legend>
+            <label>Titre</label><input id="title" required>
+            <label>Catégorie</label><select id="category"><option value="reparations">Réparations</option><option value="impression3d">Impression 3D</option><option value="laser">Gravure laser</option><option value="decoupe">Découpe laser</option><option value="creations">Créations</option></select>
+            <label>Icône</label><input id="icon" placeholder="🎨">
+            <label>Description courte</label><textarea id="description"></textarea>
+            <label>Description détaillée</label><textarea id="long_description"></textarea>
+          </fieldset>
+
+          <fieldset><legend>⚙️ Infos</legend>
+            <label>Matériau / appareil / support</label><input id="details">
+            <label>Dimensions</label><input id="dimensions">
+            <label>Temps de réalisation</label><input id="duration">
+            <label>Date</label><input id="date" type="date">
+            <label class="check"><input id="featured" type="checkbox"> Mettre à la une</label>
+          </fieldset>
+
+          <div class="actions"><button class="primary" type="submit">Enregistrer</button><button type="button" class="danger" id="deleteBtn">Supprimer</button></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="view" id="publish">
+      <h1>Publier sur GitHub</h1>
+      <ol>
+        <li>Clique sur <b>Exporter realisations.json</b>.</li>
+        <li>Va dans GitHub → dépôt <b>lucky-reparations-creations</b>.</li>
+        <li>Ouvre le dossier <b>content</b>.</li>
+        <li>Remplace le fichier <b>realisations.json</b>.</li>
+        <li>Clique <b>Commit changes</b>.</li>
+        <li>Cloudflare Pages redéploiera automatiquement.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+<script src="/backoffice/backoffice.js"></script>
+</body>
+</html>

@@ -15,3 +15,6 @@ Installation :
 4. Commit changes.
 5. Attendre le redéploiement Netlify.
 6. Recharger avec Ctrl + F5.
+
+
+V8.1 Back-office simple : ouvrir /backoffice/ pour gérer les réalisations et exporter content/realisations.json.
