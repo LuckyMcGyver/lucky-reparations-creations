@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Back-office V9 | Lucky Réparations & Créations</title>
+  <title>Back-office V10 | Lucky Réparations & Créations</title>
   <link rel="icon" href="/assets/logo.png">
   <link rel="stylesheet" href="/backoffice/backoffice.css">
 </head>
@@ -13,7 +13,7 @@
     <img src="/assets/logo.png" alt="Logo">
     <div>
       <strong>Lucky Réparations & Créations</strong>
-      <span>Back-office V9</span>
+      <span>Back-office V10</span>
     </div>
   </div>
   <nav>
@@ -28,23 +28,24 @@
   <aside class="side">
     <button class="tab active" data-view="dashboard">🏠 Tableau de bord</button>
     <button class="tab" data-view="realisations">🖼️ Réalisations</button>
-    <button class="tab" data-view="photos">📷 Photos</button>
+    
     <button class="tab" data-view="settings">⚙️ GitHub</button>
     <button class="tab" data-view="help">❓ Aide</button>
   </aside>
 
   <section class="main">
     <div class="view active" id="dashboard">
-      <h1>Tableau de bord V9</h1>
-      <p>Ajoute, modifie, supprime et publie directement sur GitHub.</p>
+      <h1>Tableau de bord V10</h1>
+      <p>Gestion complète des réalisations, photos et publication automatique vers GitHub.</p>
       <div class="stats">
         <div><strong id="countTotal">0</strong><span>Réalisations</span></div>
         <div><strong id="countFeatured">0</strong><span>À la une</span></div>
         <div><strong id="countPhotos">0</strong><span>Photos</span></div>
+        <div><strong id="countDrafts">0</strong><span>Brouillons</span></div>
       </div>
       <div class="notice good">
-        <h2>Fonctionnement</h2>
-        <p>Tu prépares les modifications ici, puis tu cliques sur <strong>Publier</strong>. Le fichier <strong>content/realisations.json</strong> est envoyé automatiquement dans GitHub, puis Cloudflare Pages redéploie le site.</p>
+        <h2>V10 active</h2>
+        <p>Tu peux glisser-déposer des photos, les envoyer dans GitHub, réorganiser les images et publier le site en un clic.</p>
       </div>
     </div>
 
@@ -52,34 +53,63 @@
       <div class="titlebar">
         <div>
           <h1>Réalisations</h1>
-          <p>Gestion complète de la galerie.</p>
+          <p>Ajout, modification, duplication, suppression et galerie multi-photos.</p>
         </div>
-        <button id="newBtn" class="primary">+ Nouvelle réalisation</button>
+        <div class="actions">
+          <button id="newBtn" class="primary">+ Nouvelle réalisation</button>
+          <button id="duplicateBtn">Dupliquer</button>
+        </div>
       </div>
 
       <div class="layout">
-        <div id="list" class="list"></div>
+        <div>
+          <input id="searchList" class="search" placeholder="Rechercher une réalisation...">
+          <div id="list" class="list"></div>
+        </div>
 
         <form id="form" class="editor">
           <h2 id="formTitle">Nouvelle réalisation</h2>
 
           <fieldset>
             <legend>📷 Image principale</legend>
-            <div class="previewBox"><img id="mainPreview" src="/assets/logo.png" alt=""></div>
+            <div class="previewBox">
+              <img id="mainPreview" src="/assets/logo.png" alt="" ondblclick="openImageModal(this.src)">
+            </div>
             <label>Chemin de l'image</label>
             <input id="image" placeholder="/assets/uploads/photo.jpg">
-            <label>Envoyer une nouvelle image principale vers GitHub</label>
-            <input id="mainUpload" type="file" accept="image/*">
-            <button type="button" id="uploadMainBtn">Envoyer cette image</button>
+
+            <div class="dropzone" id="mainDrop">
+              <strong>Glisse l'image principale ici</strong>
+              <span>ou choisis une image depuis l'ordinateur</span>
+              <input id="mainUpload" type="file" accept="image/*">
+            </div>
+
+            <button type="button" id="uploadMainBtn">Envoyer l'image principale</button>
           </fieldset>
 
           <fieldset>
-            <legend>📷 Photos supplémentaires</legend>
+            <legend>📷 Galerie photos</legend>
+            <div class="dropzone" id="extraDrop">
+              <strong>Glisse plusieurs photos ici</strong>
+              <span>Elles seront ajoutées à la galerie de cette réalisation</span>
+              <input id="extraUpload" type="file" accept="image/*" multiple>
+            </div>
+            <button type="button" id="uploadExtraBtn">Envoyer et ajouter les photos</button>
+            <p class="hint">Astuce : utilise ↑ et ↓ pour réorganiser les photos. Le bouton ⭐ définit une photo comme image principale.</p>
             <div id="photos"></div>
-            <button type="button" id="addPhotoBtn">+ Ajouter une photo</button>
-            <label>Envoyer une photo supplémentaire vers GitHub</label>
-            <input id="extraUpload" type="file" accept="image/*">
-            <button type="button" id="uploadExtraBtn">Envoyer et ajouter cette photo</button>
+            <button type="button" id="addPhotoBtn">+ Ajouter une photo par chemin</button>
+          </fieldset>
+
+          <fieldset>
+            <legend>📚 Bibliothèque intégrée</legend>
+            <p class="hint">Toutes les images utilisées par les réalisations. Clique sur une image pour la copier vers la galerie, double-clic pour l’ouvrir en grand.</p>
+            <div class="actions">
+              <button type="button" id="refreshLibraryBtn">Actualiser</button>
+              <button type="button" id="useAsMainBtn">Utiliser l'image sélectionnée comme principale</button>
+              <button type="button" id="addSelectedToGalleryBtn">Ajouter l'image sélectionnée à la galerie</button>
+            </div>
+            <input id="librarySearch" class="search" placeholder="Rechercher une image...">
+            <div id="photoGrid" class="photoGrid compact"></div>
           </fieldset>
 
           <fieldset>
@@ -96,6 +126,7 @@
             <label>Icône</label><input id="icon" placeholder="🎨">
             <label>Description courte</label><textarea id="description"></textarea>
             <label>Description détaillée</label><textarea id="long_description"></textarea>
+            <button type="button" id="suggestBtn">✨ Générer une description simple</button>
           </fieldset>
 
           <fieldset>
@@ -105,6 +136,7 @@
             <label>Temps de réalisation</label><input id="duration">
             <label>Date</label><input id="date" type="date">
             <label class="check"><input id="featured" type="checkbox"> Mettre à la une</label>
+            <label class="check"><input id="draft" type="checkbox"> Brouillon / ne pas afficher sur le site</label>
           </fieldset>
 
           <div class="actions">
@@ -115,12 +147,6 @@
       </div>
     </div>
 
-    <div class="view" id="photos">
-      <h1>Photos</h1>
-      <p>Aperçu des images utilisées dans les réalisations.</p>
-      <div id="photoGrid" class="photoGrid"></div>
-    </div>
-
     <div class="view" id="settings">
       <h1>Connexion GitHub</h1>
       <p>Ces paramètres restent enregistrés uniquement dans ton navigateur.</p>
@@ -128,7 +154,7 @@
         <label>Propriétaire GitHub</label><input id="repoOwner" value="LuckyMcGyver">
         <label>Dépôt</label><input id="repoName" value="lucky-reparations-creations">
         <label>Branche</label><input id="repoBranch" value="main">
-        <label>Token GitHub</label><input id="githubToken" type="password" placeholder="ghp_... ou github_pat_...">
+        <label>Token GitHub</label><input id="githubToken" type="password" placeholder="github_pat_...">
       </div>
       <div class="actions">
         <button id="saveSettingsBtn" class="primary">Enregistrer les paramètres</button>
@@ -137,24 +163,19 @@
       </div>
       <div class="notice">
         <h2>Token recommandé</h2>
-        <p>Crée un token GitHub limité au dépôt <strong>lucky-reparations-creations</strong> avec les droits de lecture/écriture du contenu. Ne partage jamais ce token.</p>
+        <p>Token GitHub limité au dépôt <strong>lucky-reparations-creations</strong> avec <strong>Contents: Read and write</strong>.</p>
       </div>
     </div>
 
     <div class="view" id="help">
-      <h1>Aide V9</h1>
+      <h1>Aide V10</h1>
       <ol>
-        <li>Va dans <strong>GitHub → Settings → Developer settings → Personal access tokens</strong>.</li>
-        <li>Crée un token avec accès au dépôt <strong>lucky-reparations-creations</strong>.</li>
-        <li>Colle le token dans l'onglet <strong>GitHub</strong>.</li>
-        <li>Clique <strong>Tester la connexion</strong>.</li>
-        <li>Ajoute ou modifie tes réalisations.</li>
-        <li>Clique <strong>Publier</strong>.</li>
+        <li>Va dans <strong>GitHub</strong>, crée un token avec <strong>Contents: Read and write</strong>.</li>
+        <li>Colle-le dans l'onglet <strong>GitHub</strong>.</li>
+        <li>Ajoute ou modifie des réalisations.</li>
+        <li>Glisse des photos dans les zones prévues.</li>
+        <li>Clique sur <strong>🚀 Publier</strong>.</li>
       </ol>
-      <div class="notice good">
-        <h2>Après publication</h2>
-        <p>Cloudflare Pages détecte automatiquement le changement sur GitHub et redéploie le site.</p>
-      </div>
     </div>
   </section>
 </main>

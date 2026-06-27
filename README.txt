@@ -25,3 +25,21 @@ V9 Back-office GitHub automatique :
 - Upload d'images vers assets/uploads via GitHub API.
 - Bouton Publier : met à jour content/realisations.json dans GitHub.
 - Nécessite un Personal Access Token GitHub enregistré localement dans le navigateur.
+
+V10 Back-office Galerie Pro :
+- Glisser-déposer des images.
+- Upload multiple vers GitHub.
+- Réorganisation des photos avec ↑ / ↓.
+- Définir une photo comme image principale avec ⭐.
+- Duplication de réalisation.
+- Mode brouillon.
+- Validation avant publication.
+- Bibliothèque photos.
+- Génération d'une description simple.
+
+V10.1 Back-office simplifié :
+- Suppression de l'onglet Photos séparé.
+- Bibliothèque d'images intégrée directement dans Réalisations.
+- Sélection d'une image existante.
+- Bouton pour utiliser l'image sélectionnée comme image principale.
+- Bouton pour ajouter l'image sélectionnée à la galerie.
