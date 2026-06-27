@@ -307,3 +307,8 @@
 .gallery-item { cursor: zoom-in !important; }
 .gallery-item * { pointer-events: none; }
 .lightbox button, .lightbox img, .lightbox-caption { pointer-events: auto; }
+
+/* V7.3 CMS compatible */
+.gallery-item { cursor: zoom-in !important; }
+.gallery-item * { pointer-events: none; }
+.lightbox button, .lightbox img, .lightbox-caption { pointer-events: auto; }

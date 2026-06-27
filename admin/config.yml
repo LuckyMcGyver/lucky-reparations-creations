@@ -22,49 +22,34 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - label: "📷 Images"
-                name: "images_section"
-                widget: "object"
-                collapsed: false
+              - {label: "📷 Image principale", name: "image", widget: "image"}
+              - label: "📷 Photos supplémentaires"
+                name: "photos"
+                widget: "list"
+                required: false
                 fields:
-                  - {label: "Image principale", name: "image", widget: "image"}
-                  - label: "Photos supplémentaires"
-                    name: "photos"
-                    widget: "list"
-                    required: false
-                    fields:
-                      - {label: "Photo", name: "photo", widget: "image"}
-                      - {label: "Légende", name: "caption", widget: "string", required: false}
+                  - {label: "Photo", name: "photo", widget: "image"}
+                  - {label: "Légende", name: "caption", widget: "string", required: false}
 
-              - label: "📝 Description"
-                name: "description_section"
-                widget: "object"
-                collapsed: false
-                fields:
-                  - {label: "Titre", name: "title", widget: "string"}
-                  - label: "Catégorie"
-                    name: "category"
-                    widget: "select"
-                    options:
-                      - {label: "Réparations", value: "reparations"}
-                      - {label: "Impression 3D", value: "impression3d"}
-                      - {label: "Gravure laser", value: "laser"}
-                      - {label: "Découpe laser", value: "decoupe"}
-                      - {label: "Créations", value: "creations"}
-                  - {label: "Icône", name: "icon", widget: "string", required: false, hint: "Exemple : 🔧, 🖨️, 🔥"}
-                  - {label: "Description courte", name: "description", widget: "text", hint: "Texte affiché sur la carte de galerie"}
-                  - {label: "Description détaillée", name: "long_description", widget: "text", required: false, hint: "Texte affiché dans la fiche détaillée"}
+              - {label: "📝 Titre", name: "title", widget: "string"}
+              - label: "📝 Catégorie"
+                name: "category"
+                widget: "select"
+                options:
+                  - {label: "Réparations", value: "reparations"}
+                  - {label: "Impression 3D", value: "impression3d"}
+                  - {label: "Gravure laser", value: "laser"}
+                  - {label: "Découpe laser", value: "decoupe"}
+                  - {label: "Créations", value: "creations"}
+              - {label: "📝 Icône", name: "icon", widget: "string", required: false, hint: "Exemple : 🔧, 🖨️, 🔥"}
+              - {label: "📝 Description courte", name: "description", widget: "text"}
+              - {label: "📝 Description détaillée", name: "long_description", widget: "text", required: false}
 
-              - label: "⚙️ Informations"
-                name: "infos_section"
-                widget: "object"
-                collapsed: false
-                fields:
-                  - {label: "Matériau / appareil / support", name: "details", widget: "string", required: false}
-                  - {label: "Dimensions", name: "dimensions", widget: "string", required: false}
-                  - {label: "Temps de réalisation", name: "duration", widget: "string", required: false}
-                  - {label: "Mettre à la une", name: "featured", widget: "boolean", required: false, default: false}
-                  - {label: "Date", name: "date", widget: "datetime", required: false}
+              - {label: "⚙️ Matériau / appareil / support", name: "details", widget: "string", required: false}
+              - {label: "⚙️ Dimensions", name: "dimensions", widget: "string", required: false}
+              - {label: "⚙️ Temps de réalisation", name: "duration", widget: "string", required: false}
+              - {label: "⭐ Mettre à la une", name: "featured", widget: "boolean", required: false, default: false}
+              - {label: "📅 Date", name: "date", widget: "datetime", required: false}
 
   - name: "avis"
     label: "Avis clients"

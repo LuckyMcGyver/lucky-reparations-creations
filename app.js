@@ -31,7 +31,20 @@ function flattenProject(p) {
       date: info.date || ""
     };
   }
-  return p;
+  return {
+    title: p.title || "Réalisation",
+    category: p.category || "creations",
+    icon: p.icon || "",
+    description: p.description || "",
+    long_description: p.long_description || "",
+    image: p.image || "/assets/hero.png",
+    photos: p.photos || [],
+    details: p.details || "",
+    dimensions: p.dimensions || "",
+    duration: p.duration || "",
+    featured: !!p.featured,
+    date: p.date || ""
+  };
 }
 
 let allProjects = [];
@@ -93,8 +106,6 @@ function setupFilters(){
 function setupGalleryClicks(){
   const grid = document.getElementById('galleryGrid');
   if(!grid) return;
-
-  // V7.2.2 : le clic sur toute la carte ouvre directement l'image en plein écran.
   grid.addEventListener('click', (e) => {
     const card = e.target.closest('.gallery-item');
     if(!card) return;
@@ -102,23 +113,6 @@ function setupGalleryClicks(){
     openLightbox();
   });
 }
-function setModalPhoto(index) {
-  if (!currentPhotos.length) return;
-  currentPhotoIndex = (index + currentPhotos.length) % currentPhotos.length;
-  const ph = currentPhotos[currentPhotoIndex];
-  const mainImg = document.getElementById('modalMainImage');
-  if (mainImg) {
-    mainImg.src = ph.photo;
-    mainImg.alt = ph.caption || "";
-  }
-  document.querySelectorAll('#modalPhotos img').forEach((img, i) => img.classList.toggle('active', i === currentPhotoIndex));
-}
-function closeProjectModal(){
-  document.getElementById('projectModal')?.classList.remove('open');
-}
-function prevModalPhoto(){ setModalPhoto(currentPhotoIndex - 1); }
-function nextModalPhoto(){ setModalPhoto(currentPhotoIndex + 1); }
-
 function openLightbox() {
   if (!currentPhotos.length) return;
 
@@ -155,7 +149,6 @@ function closeLightbox(){
 function setLightboxPhoto(index) {
   if (!currentPhotos.length) return;
   currentPhotoIndex = (index + currentPhotos.length) % currentPhotos.length;
-  setModalPhoto(currentPhotoIndex);
   openLightbox();
 }
 function prevLightbox(){ setLightboxPhoto(currentPhotoIndex - 1); }
@@ -191,15 +184,10 @@ function setupLightboxEvents(){
   }, {passive:true});
 }
 function setupGlobalPhotoTools(){
-  document.getElementById('modalMainImage')?.addEventListener('click', openLightbox);
-  document.getElementById('projectModal')?.addEventListener('click', e => {
-    if(e.target.id === 'projectModal') closeProjectModal();
-  });
   setupLightboxEvents();
-
   document.addEventListener('keydown', e => {
     const lightboxOpen = document.getElementById('lightbox')?.classList.contains('open');
-    if(e.key === 'Escape') lightboxOpen ? closeLightbox() : closeProjectModal();
+    if(e.key === 'Escape' && lightboxOpen) closeLightbox();
     if(e.key === 'ArrowLeft' && lightboxOpen) prevLightbox();
     if(e.key === 'ArrowRight' && lightboxOpen) nextLightbox();
   });
