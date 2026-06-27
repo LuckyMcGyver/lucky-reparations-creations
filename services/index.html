@@ -1,31 +1,26 @@
-<!doctype html><html lang="fr-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="google-site-verification" content="1x1FHLzYrqG6f4obSSifFVpXf44gHq4O3ZmsI2_jiWU"><title>Services | Lucky Réparations & Créations</title><meta name="description" content="Services à Mouscron et Tournai : GSM, électroménager, impression 3D, laser."><meta name="robots" content="index, follow"><link rel="icon" href="/assets/logo.png"><link rel="stylesheet" href="/style.css"><meta property="og:title" content="Services | Lucky Réparations & Créations"><meta property="og:description" content="Services à Mouscron et Tournai : GSM, électroménager, impression 3D, laser."><meta property="og:image" content="https://lucky-reparations-creations.netlify.app/assets/hero.png"></head><body>
-<header><div class="container nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="Logo"><span>Lucky Réparations & Créations<small>Mouscron • Tournai et environs</small></span></a><nav class="links" id="menu"><a href="/">Accueil</a><a href="/services/">Services</a><a href="/galerie/">Galerie</a><a href="/actualites/">Actualités</a><a href="/avis/">Avis</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a class="cta" href="/devis/">Demander un devis</a></nav><button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('open')">Menu</button></div></header>
-<main><section class="page-hero"><div class="container"><h1>Services</h1><p>Réparation, fabrication numérique et créations personnalisées.</p></div></section><section><div class="container grid services"><a class="card" href="/services/reparation-gsm/"><div class="icon">📱</div><h3>Réparation GSM</h3><p>Smartphones et tablettes.</p></a><a class="card" href="/services/electromenager/"><div class="icon">🛠</div><h3>Électroménager</h3><p>Petits appareils.</p></a><a class="card" href="/services/impression-3d/"><div class="icon">🖨</div><h3>Impression 3D</h3><p>Pièces sur mesure.</p></a><a class="card" href="/services/laser/"><div class="icon">🔥</div><h3>Laser</h3><p>Gravure et découpe.</p></a></div></section></main>
-<footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer><script src="/app.js"></script>
-
+<!doctype html><html lang="fr-BE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="google-site-verification" content="1x1FHLzYrqG6f4obSSifFVpXf44gHq4O3ZmsI2_jiWU"><meta name="robots" content="index, follow"><link rel="icon" href="/assets/logo.png"><link rel="stylesheet" href="/style.css"><title>Services | Lucky Réparations & Créations</title><meta name="description" content="Services à Mouscron et Tournai."><meta property="og:title" content="Services | Lucky Réparations & Créations"><meta property="og:description" content="Services à Mouscron et Tournai."><meta property="og:image" content="https://lucky-reparations-creations.netlify.app/assets/hero.png"></head><body><header><div class="container nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="Logo"><span>Lucky Réparations & Créations<small>Mouscron • Tournai et environs</small></span></a><nav class="links" id="menu"><a href="/">Accueil</a><a href="/services/">Services</a><a href="/galerie/">Galerie</a><a href="/actualites/">Actualités</a><a href="/avis/">Avis</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a class="cta" href="/devis/">Demander un devis</a></nav><button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('open')">Menu</button></div></header><main>
+<section class="page-hero"><div class="container"><h1>Services</h1><p>Réparation, fabrication numérique et créations personnalisées.</p></div></section>
+<section><div class="container grid services">
+<a class="card" href="/services/reparation-gsm/"><div class="icon">📱</div><h3>Réparation GSM</h3><p>Diagnostic, écrans, batteries, connecteurs et réparations selon faisabilité.</p></a>
+<a class="card" href="/services/electromenager/"><div class="icon">🛠</div><h3>Petit électroménager</h3><p>Recherche de pannes et remise en état de petits appareils.</p></a>
+<a class="card" href="/services/impression-3d/"><div class="icon">🖨</div><h3>Impression 3D</h3><p>Pièces techniques, prototypes, supports, objets personnalisés.</p></a>
+<a class="card" href="/services/laser/"><div class="icon">🔥</div><h3>Laser</h3><p>Gravure, découpe et personnalisation.</p></a>
+</div></section>
+</main><footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer>
+<script src="/app.js"></script>
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on("init", function() {
       const hash = window.location.hash || "";
-      const isInviteOrRecovery =
-        hash.includes("invite_token=") ||
-        hash.includes("recovery_token=") ||
-        hash.includes("confirmation_token=");
-
-      if (isInviteOrRecovery) {
+      if (hash.includes("invite_token=") || hash.includes("recovery_token=") || hash.includes("confirmation_token=")) {
         window.netlifyIdentity.open();
       }
     });
-
     window.netlifyIdentity.on("login", function() {
-      if (window.location.pathname.startsWith("/admin")) {
-        window.location.reload();
-      } else {
-        window.netlifyIdentity.close();
-      }
+      if (window.location.pathname.startsWith("/admin")) window.location.reload();
+      else window.netlifyIdentity.close();
     });
   }
 </script>
-
 </body></html>

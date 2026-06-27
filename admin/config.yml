@@ -22,8 +22,8 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - {label: "📷 IMAGE — Image principale", name: "image", widget: "image"}
-              - label: "📷 IMAGE — Photos supplémentaires"
+              - {label: "📷 Image principale", name: "image", widget: "image"}
+              - label: "📷 Photos supplémentaires"
                 name: "photos"
                 widget: "list"
                 required: false
@@ -31,9 +31,8 @@ collections:
                 fields:
                   - {label: "Photo", name: "photo", widget: "image"}
                   - {label: "Légende", name: "caption", widget: "string", required: false}
-
-              - {label: "📝 DESCRIPTION — Titre", name: "title", widget: "string"}
-              - label: "📝 DESCRIPTION — Catégorie"
+              - {label: "📝 Titre", name: "title", widget: "string"}
+              - label: "📝 Catégorie"
                 name: "category"
                 widget: "select"
                 options:
@@ -42,15 +41,14 @@ collections:
                   - {label: "Gravure laser", value: "laser"}
                   - {label: "Découpe laser", value: "decoupe"}
                   - {label: "Créations", value: "creations"}
-              - {label: "📝 DESCRIPTION — Icône", name: "icon", widget: "string", required: false, hint: "Exemple : 🔧, 🖨️, 🔥"}
-              - {label: "📝 DESCRIPTION — Description courte", name: "description", widget: "text"}
-              - {label: "📝 DESCRIPTION — Description détaillée", name: "long_description", widget: "text", required: false}
-
-              - {label: "⚙️ INFOS — Matériau / appareil / support", name: "details", widget: "string", required: false}
-              - {label: "⚙️ INFOS — Dimensions", name: "dimensions", widget: "string", required: false}
-              - {label: "⚙️ INFOS — Temps de réalisation", name: "duration", widget: "string", required: false}
-              - {label: "⭐ INFOS — Mettre à la une", name: "featured", widget: "boolean", required: false, default: false}
-              - {label: "📅 INFOS — Date", name: "date", widget: "datetime", required: false}
+              - {label: "📝 Icône", name: "icon", widget: "string", required: false, hint: "Exemple : 🔧, 🖨️, 🔥"}
+              - {label: "📝 Description courte", name: "description", widget: "text"}
+              - {label: "📝 Description détaillée", name: "long_description", widget: "text", required: false}
+              - {label: "⚙️ Matériau / appareil / support", name: "details", widget: "string", required: false}
+              - {label: "⚙️ Dimensions", name: "dimensions", widget: "string", required: false}
+              - {label: "⚙️ Temps de réalisation", name: "duration", widget: "string", required: false}
+              - {label: "⭐ Mettre à la une", name: "featured", widget: "boolean", required: false, default: false}
+              - {label: "📅 Date", name: "date", widget: "datetime", required: false}
 
   - name: "avis"
     label: "Avis clients"

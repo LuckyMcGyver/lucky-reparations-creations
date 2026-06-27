@@ -1,12 +1,12 @@
-Lucky Réparations & Créations — V7.4 Migration propre
+Lucky Réparations & Créations — V8 Base propre
 
-Ce que cette version corrige :
-- supprime définitivement le problème "No images_section" dans le CMS ;
-- migre les 4 réalisations actuelles vers un format simple et stable ;
-- conserve Lampe cheval et ses photos ;
-- conserve la séparation pratique Image / Description / Infos dans l'administration via les libellés ;
-- clic sur une carte = ouverture de l'image en plein écran ;
-- la galerie reste compatible avec les anciennes et nouvelles données.
+Objectif :
+- une seule source de données : content/realisations.json ;
+- le CMS et la galerie utilisent exactement le même fichier ;
+- plus aucune carte codée en dur ;
+- clic sur une carte = ouverture photo plein écran ;
+- conservation de la réalisation Lampe cheval ;
+- base plus simple à maintenir.
 
 Installation :
 1. Décompresser l'archive.
