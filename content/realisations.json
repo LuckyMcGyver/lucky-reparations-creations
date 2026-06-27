@@ -1,39 +1,64 @@
 {
   "body": [
     {
-      "title": "Diagnostic et réparation",
-      "category": "reparations",
-      "icon": "🔧",
-      "description": "Recherche de panne et remise en état selon faisabilité.",
-      "image": "/assets/hero.png",
-      "featured": false,
-      "details": ""
+      "images_section": {
+        "image": "/assets/hero.png",
+        "photos": []
+      },
+      "description_section": {
+        "title": "Diagnostic et réparation",
+        "category": "reparations",
+        "icon": "🔧",
+        "description": "Recherche de panne et remise en état selon faisabilité.",
+        "long_description": ""
+      },
+      "infos_section": {
+        "details": "",
+        "dimensions": "",
+        "duration": "",
+        "featured": true,
+        "date": ""
+      }
     },
     {
-      "title": "Pièce technique imprimée en 3D",
-      "category": "impression3d",
-      "icon": "🖨️",
-      "description": "Fabrication de pièces sur mesure ou devenues introuvables.",
-      "image": "/assets/logo.png",
-      "featured": true,
-      "details": ""
+      "images_section": {
+        "image": "/assets/logo.png",
+        "photos": []
+      },
+      "description_section": {
+        "title": "Pièce technique imprimée en 3D",
+        "category": "impression3d",
+        "icon": "🖨️",
+        "description": "Fabrication de pièces sur mesure ou devenues introuvables.",
+        "long_description": ""
+      },
+      "infos_section": {
+        "details": "",
+        "dimensions": "",
+        "duration": "",
+        "featured": true,
+        "date": ""
+      }
     },
     {
-      "title": "Gravure laser personnalisée",
-      "category": "laser",
-      "icon": "🔥",
-      "description": "Personnalisation d'objets, plaques, cadeaux et trophées.",
-      "image": "/assets/hero.png",
-      "featured": true,
-      "details": ""
-    },
-    {
-      "featured": true,
-      "title": "Lampe cheval",
-      "category": "creations",
-      "description": "Tête de cheval surmonté d'un abat-jour assorti",
-      "image": "/assets/uploads/img_20210615_103505.jpg",
-      "date": "2025-02-27T09:06:00.000+01:00"
+      "images_section": {
+        "image": "/assets/hero.png",
+        "photos": []
+      },
+      "description_section": {
+        "title": "Gravure laser personnalisée",
+        "category": "laser",
+        "icon": "🔥",
+        "description": "Personnalisation d'objets, plaques, cadeaux et trophées.",
+        "long_description": ""
+      },
+      "infos_section": {
+        "details": "",
+        "dimensions": "",
+        "duration": "",
+        "featured": true,
+        "date": ""
+      }
     }
   ]
 }

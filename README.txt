@@ -1,19 +1,20 @@
-Lucky Réparations & Créations — V7 gratuite
+Lucky Réparations & Créations — V7.1 Galerie professionnelle
 
-Objectif :
-- conserver GitHub + Netlify gratuits ;
-- améliorer la galerie et le confort d'administration ;
-- cacher la section administration aux visiteurs ;
-- ajouter réalisations à la une ;
-- ajouter gestion CMS des avis et actualités ;
-- garder les devis d'impression 3D entièrement manuels.
+Nouveautés :
+- CMS organisé en 3 sections : Images, Description, Informations ;
+- image principale + photos supplémentaires ;
+- cartes de galerie recadrées automatiquement ;
+- recherche par mot-clé ;
+- filtres par catégorie ;
+- tri par date ;
+- badge Nouveau ;
+- badge À la une ;
+- fiche détaillée au clic avec image en grand ;
+- bouton Demander un devis similaire.
 
 Installation :
-1. Décompresser cette archive.
+1. Décompresser l'archive.
 2. GitHub > Add file > Upload files.
-3. Glisser tout le contenu du dossier.
+3. Glisser tout le contenu.
 4. Commit changes.
 5. Attendre le redéploiement Netlify.
-
-Administration :
-https://lucky-reparations-creations.netlify.app/admin/
