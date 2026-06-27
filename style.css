@@ -302,3 +302,8 @@
   .lightbox-caption { bottom: 70px; }
   .modal-nav button { width: 40px; height: 40px; }
 }
+
+/* V7.2.2 : clic direct sur toute la carte */
+.gallery-item { cursor: zoom-in !important; }
+.gallery-item * { pointer-events: none; }
+.lightbox button, .lightbox img, .lightbox-caption { pointer-events: auto; }
