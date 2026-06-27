@@ -1,16 +1,13 @@
-Lucky Réparations & Créations — V7.1 Galerie professionnelle
+Lucky Réparations & Créations — V7.2 Portfolio Lightbox
 
 Nouveautés :
-- CMS organisé en 3 sections : Images, Description, Informations ;
-- image principale + photos supplémentaires ;
-- cartes de galerie recadrées automatiquement ;
-- recherche par mot-clé ;
-- filtres par catégorie ;
-- tri par date ;
-- badge Nouveau ;
-- badge À la une ;
-- fiche détaillée au clic avec image en grand ;
-- bouton Demander un devis similaire.
+- clic sur la photo dans la fiche = ouverture plein écran ;
+- navigation photos précédente/suivante ;
+- zoom par double-clic, bouton Zoom et molette souris ;
+- fermeture avec Échap ou bouton × ;
+- balayage gauche/droite sur smartphone ;
+- miniatures actives ;
+- cartes galerie améliorées.
 
 Installation :
 1. Décompresser l'archive.

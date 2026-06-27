@@ -16,7 +16,11 @@
   <div class="project-modal-content">
     <div class="modal-grid">
       <div class="modal-image">
-        <img id="modalMainImage" src="" alt="">
+        <img id="modalMainImage" src="" alt="" title="Cliquer pour ouvrir en plein écran">
+        <div class="modal-nav">
+          <button onclick="prevModalPhoto()" aria-label="Photo précédente">‹</button>
+          <button onclick="nextModalPhoto()" aria-label="Photo suivante">›</button>
+        </div>
       </div>
       <div class="modal-info">
         <button class="modal-close" onclick="closeProjectModal()">×</button>
@@ -31,6 +35,16 @@
       </div>
     </div>
   </div>
+</div>
+
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fermer">×</button>
+  <button class="lightbox-prev" onclick="prevLightbox()" aria-label="Photo précédente">‹</button>
+  <img id="lightboxImage" src="" alt="">
+  <button class="lightbox-next" onclick="nextLightbox()" aria-label="Photo suivante">›</button>
+  <button class="lightbox-zoom" onclick="toggleLightboxZoom()">Zoom</button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
 </div>
 
 </main>
