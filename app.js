@@ -33,16 +33,23 @@ function flattenProject(p) {
   }
   return p;
 }
+
 let allProjects = [];
 let currentProjectIndex = 0;
 let currentPhotoIndex = 0;
 let currentPhotos = [];
 let lightboxZoom = 1;
 
+function isRecent(dateValue) {
+  if (!dateValue) return false;
+  const d = new Date(dateValue);
+  if (Number.isNaN(d.getTime())) return false;
+  return (Date.now() - d.getTime()) / 86400000 <= 30;
+}
 function projectCard(r, index) {
   const isNew = isRecent(r.date);
   return `<article class="gallery-item" data-index="${index}" data-cat="${r.category}" data-search="${(r.title+' '+r.description+' '+r.details).toLowerCase()}">
-    <img src="${r.image}" alt="${r.title}">
+    <img src="${r.image}" alt="${r.title}" title="Cliquer pour agrandir">
     <div>
       ${r.featured ? '<span class="star">À la une</span>' : ''}
       ${isNew ? '<span class="star">Nouveau</span>' : ''}
@@ -52,11 +59,18 @@ function projectCard(r, index) {
     </div>
   </article>`;
 }
-function isRecent(dateValue) {
-  if (!dateValue) return false;
-  const d = new Date(dateValue);
-  if (Number.isNaN(d.getTime())) return false;
-  return (Date.now() - d.getTime()) / 86400000 <= 30;
+function normalizePhotos(p) {
+  return [{photo:p.image, caption:'Image principale'}].concat((p.photos || []).map(ph => {
+    if (typeof ph === "string") return {photo: ph, caption: ""};
+    return ph;
+  })).filter(ph => ph.photo);
+}
+function prepareProject(index) {
+  currentProjectIndex = index;
+  const p = allProjects[index];
+  currentPhotos = normalizePhotos(p);
+  currentPhotoIndex = 0;
+  return p;
 }
 function setupFilters(){
   const apply = () => {
@@ -76,37 +90,39 @@ function setupFilters(){
   }));
   document.getElementById('gallerySearch')?.addEventListener('input', apply);
 }
-function setupModal(){
-  const modal = document.getElementById('projectModal');
-  if(!modal) return;
-  document.querySelectorAll('.gallery-item').forEach(card => card.addEventListener('click', () => {
-    const idx = Number(card.dataset.index);
-    currentProjectIndex = idx;
-    openProjectModal(allProjects[idx]);
-  }));
-  modal.addEventListener('click', e => {
-    if(e.target.id === 'projectModal') closeProjectModal();
+function setupGalleryClicks(){
+  const grid = document.getElementById('galleryGrid');
+  if(!grid) return;
+  grid.addEventListener('click', (e) => {
+    const card = e.target.closest('.gallery-item');
+    if(!card) return;
+    const index = Number(card.dataset.index);
+    const p = prepareProject(index);
+
+    // Direct click on image = full screen photo
+    if (e.target.tagName && e.target.tagName.toLowerCase() === 'img') {
+      openLightbox();
+      return;
+    }
+
+    // Click on text/card = detail sheet
+    openProjectModal(p);
   });
-}
-function normalizePhotos(p) {
-  return [{photo:p.image, caption:'Image principale'}].concat((p.photos || []).map(ph => {
-    if (typeof ph === "string") return {photo: ph, caption: ""};
-    return ph;
-  })).filter(ph => ph.photo);
 }
 function setModalPhoto(index) {
   if (!currentPhotos.length) return;
   currentPhotoIndex = (index + currentPhotos.length) % currentPhotos.length;
   const ph = currentPhotos[currentPhotoIndex];
   const mainImg = document.getElementById('modalMainImage');
-  mainImg.src = ph.photo;
-  mainImg.alt = ph.caption || "";
+  if (mainImg) {
+    mainImg.src = ph.photo;
+    mainImg.alt = ph.caption || "";
+  }
   document.querySelectorAll('#modalPhotos img').forEach((img, i) => img.classList.toggle('active', i === currentPhotoIndex));
 }
 function openProjectModal(p) {
   const modal = document.getElementById('projectModal');
-  currentPhotos = normalizePhotos(p);
-  currentPhotoIndex = 0;
+  if(!modal) return;
 
   document.getElementById('modalTitle').textContent = `${p.icon || ''} ${p.title}`;
   document.getElementById('modalDescription').textContent = p.long_description || p.description || '';
@@ -136,10 +152,11 @@ function openLightbox() {
   const lb = document.getElementById('lightbox');
   const img = document.getElementById('lightboxImage');
   const cap = document.getElementById('lightboxCaption');
+  if(!lb || !img) return;
   const ph = currentPhotos[currentPhotoIndex];
   img.src = ph.photo;
   img.alt = ph.caption || "";
-  cap.textContent = ph.caption || document.getElementById('modalTitle')?.textContent || "";
+  cap.textContent = ph.caption || allProjects[currentProjectIndex]?.title || "";
   lightboxZoom = 1;
   img.style.transform = "scale(1)";
   img.classList.remove("zoomed");
@@ -159,12 +176,18 @@ function nextLightbox(){ setLightboxPhoto(currentPhotoIndex + 1); }
 function toggleLightboxZoom(){
   lightboxZoom = lightboxZoom === 1 ? 2 : 1;
   const img = document.getElementById('lightboxImage');
+  if(!img) return;
   img.style.transform = `scale(${lightboxZoom})`;
   img.classList.toggle("zoomed", lightboxZoom > 1);
 }
-function setupLightbox(){
-  const main = document.getElementById('modalMainImage');
-  main?.addEventListener('click', openLightbox);
+function setupGlobalPhotoTools(){
+  document.getElementById('modalMainImage')?.addEventListener('click', openLightbox);
+
+  const modal = document.getElementById('projectModal');
+  modal?.addEventListener('click', e => {
+    if(e.target.id === 'projectModal') closeProjectModal();
+  });
+
   const lb = document.getElementById('lightbox');
   const img = document.getElementById('lightboxImage');
   lb?.addEventListener('click', e => {
@@ -203,8 +226,8 @@ async function renderGallery(){
   allProjects.sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
   grid.innerHTML=allProjects.map(projectCard).join('');
   setupFilters();
-  setupModal();
-  setupLightbox();
+  setupGalleryClicks();
+  setupGlobalPhotoTools();
 }
 async function renderFeatured(){
   const grid=document.getElementById('featuredGrid');
