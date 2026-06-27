@@ -1,48 +1,6 @@
 {
   "body": [
     {
-      "photos": [],
-      "details": "",
-      "dimensions": "",
-      "featured": true,
-      "date": "",
-      "duration": "",
-      "title": "Diagnostic et réparation",
-      "icon": "🔧",
-      "long_description": "",
-      "image": "/assets/hero.png",
-      "description": "Recherche de panne et remise en état selon faisabilité.",
-      "category": "reparations"
-    },
-    {
-      "photos": [],
-      "details": "",
-      "dimensions": "",
-      "featured": true,
-      "date": "",
-      "duration": "",
-      "title": "Pièce technique imprimée en 3D",
-      "icon": "🖨️",
-      "long_description": "",
-      "image": "/assets/logo.png",
-      "description": "Fabrication de pièces sur mesure ou devenues introuvables.",
-      "category": "impression3d"
-    },
-    {
-      "photos": [],
-      "details": "",
-      "dimensions": "",
-      "featured": true,
-      "date": "",
-      "duration": "",
-      "title": "Gravure laser personnalisée",
-      "icon": "🔥",
-      "long_description": "",
-      "image": "/assets/hero.png",
-      "description": "Personnalisation d'objets, plaques, cadeaux et trophées.",
-      "category": "laser"
-    },
-    {
       "photos": [
         {
           "photo": "/assets/uploads/lampe-cheval-3.jpg",
@@ -66,11 +24,7 @@
       "description": "Tête de cheval avec abat-jour assorti",
       "images_section": {
         "image": "/assets/uploads/img_20210615_103505.jpg",
-        "photos": [
-          {
-            "photo": "/assets/uploads/lampe-cheval-3.jpg"
-          }
-        ]
+        "photos": []
       },
       "category": "creations"
     }
