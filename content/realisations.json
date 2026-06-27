@@ -59,6 +59,20 @@
         "featured": true,
         "date": ""
       }
+    },
+    {
+      "infos_section": {
+        "featured": false
+      },
+      "images_section": {
+        "image": "/assets/uploads/img_20210615_103505.jpg"
+      },
+      "description_section": {
+        "title": "Lampe cheval",
+        "category": "creations",
+        "icon": "",
+        "description": "Tête de cheval avec abat-jour assorti"
+      }
     }
   ]
 }
