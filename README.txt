@@ -18,3 +18,10 @@ Installation :
 
 
 V8.1 Back-office simple : ouvrir /backoffice/ pour gérer les réalisations et exporter content/realisations.json.
+
+V9 Back-office GitHub automatique :
+- URL : /backoffice/
+- Ajout/modification/suppression des réalisations.
+- Upload d'images vers assets/uploads via GitHub API.
+- Bouton Publier : met à jour content/realisations.json dans GitHub.
+- Nécessite un Personal Access Token GitHub enregistré localement dans le navigateur.
