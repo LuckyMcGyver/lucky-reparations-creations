@@ -6,7 +6,7 @@
       "icon": "🔧",
       "description": "Recherche de panne et remise en état selon faisabilité.",
       "image": "/assets/hero.png",
-      "featured": true,
+      "featured": false,
       "details": ""
     },
     {
