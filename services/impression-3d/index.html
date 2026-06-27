@@ -2,19 +2,28 @@
 <header><div class="container nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="Logo"><span>Lucky Réparations & Créations<small>Mouscron • Tournai et environs</small></span></a><nav class="links" id="menu"><a href="/">Accueil</a><a href="/services/">Services</a><a href="/galerie/">Galerie</a><a href="/actualites/">Actualités</a><a href="/avis/">Avis</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a class="cta" href="/devis/">Demander un devis</a></nav><button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('open')">Menu</button></div></header>
 <main><section class="page-hero"><div class="container"><h1>🖨 Impression 3D & modélisation</h1><p>Fabrication de pièces sur mesure, prototypes et objets personnalisés. Aucun prix automatique : devis validé manuellement.</p><div class="hero-actions" style="justify-content:flex-start"><a class="cta orange" href="/devis/">Demander un devis</a><a class="cta" href="/galerie/">Voir les réalisations</a></div></div></section><section><div class="container split"><div class="panel"><h2>Ce que je peux faire</h2><ul><li>Pièces techniques et supports personnalisés</li><li>Modélisation à partir d'une idée, photo ou pièce cassée</li><li>STL, 3MF, OBJ acceptés pour analyse</li><li>Devis confirmé après vérification</li></ul></div><div class="panel"><h2>Zone de service</h2><p>Demandes principalement sur <strong>Mouscron, Tournai et environs</strong>.</p><p>Envoyez une photo, une description de la panne ou du projet et vos coordonnées.</p><a class="cta orange" href="/devis/">Faire une demande</a></div></div></section></main>
 <footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer><script src="/app.js"></script>
+
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
   if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", function(user) {
-      if (!user && window.location.hash && window.location.hash.includes("_token=")) {
+    window.netlifyIdentity.on("init", function() {
+      const hash = window.location.hash || "";
+      const isInviteOrRecovery =
+        hash.includes("invite_token=") ||
+        hash.includes("recovery_token=") ||
+        hash.includes("confirmation_token=");
+
+      if (isInviteOrRecovery) {
         window.netlifyIdentity.open();
       }
     });
+
     window.netlifyIdentity.on("login", function() {
-      document.location.href = "/admin/";
-    });
-    window.netlifyIdentity.on("logout", function() {
-      document.location.href = "/";
+      if (window.location.pathname.startsWith("/admin")) {
+        window.location.reload();
+      } else {
+        window.netlifyIdentity.close();
+      }
     });
   }
 </script>
