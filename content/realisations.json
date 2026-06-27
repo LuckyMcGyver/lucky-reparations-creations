@@ -1,65 +1,78 @@
 {
   "body": [
     {
-      "image": "/assets/hero.png",
       "photos": [],
+      "details": "",
+      "dimensions": "",
+      "featured": true,
+      "date": "",
+      "duration": "",
       "title": "Diagnostic et réparation",
-      "category": "reparations",
       "icon": "🔧",
-      "description": "Recherche de panne et remise en état selon faisabilité.",
       "long_description": "",
-      "details": "",
-      "dimensions": "",
-      "duration": "",
-      "featured": true,
-      "date": ""
-    },
-    {
-      "image": "/assets/logo.png",
-      "photos": [],
-      "title": "Pièce technique imprimée en 3D",
-      "category": "impression3d",
-      "icon": "🖨️",
-      "description": "Fabrication de pièces sur mesure ou devenues introuvables.",
-      "long_description": "",
-      "details": "",
-      "dimensions": "",
-      "duration": "",
-      "featured": true,
-      "date": ""
-    },
-    {
       "image": "/assets/hero.png",
-      "photos": [],
-      "title": "Gravure laser personnalisée",
-      "category": "laser",
-      "icon": "🔥",
-      "description": "Personnalisation d'objets, plaques, cadeaux et trophées.",
-      "long_description": "",
-      "details": "",
-      "dimensions": "",
-      "duration": "",
-      "featured": true,
-      "date": ""
+      "description": "Recherche de panne et remise en état selon faisabilité.",
+      "category": "reparations"
     },
     {
-      "image": "/assets/uploads/img_20210615_103505.jpg",
+      "photos": [],
+      "details": "",
+      "dimensions": "",
+      "featured": true,
+      "date": "",
+      "duration": "",
+      "title": "Pièce technique imprimée en 3D",
+      "icon": "🖨️",
+      "long_description": "",
+      "image": "/assets/logo.png",
+      "description": "Fabrication de pièces sur mesure ou devenues introuvables.",
+      "category": "impression3d"
+    },
+    {
+      "photos": [],
+      "details": "",
+      "dimensions": "",
+      "featured": true,
+      "date": "",
+      "duration": "",
+      "title": "Gravure laser personnalisée",
+      "icon": "🔥",
+      "long_description": "",
+      "image": "/assets/hero.png",
+      "description": "Personnalisation d'objets, plaques, cadeaux et trophées.",
+      "category": "laser"
+    },
+    {
       "photos": [
         {
           "photo": "/assets/uploads/lampe-cheval-3.jpg",
           "caption": ""
         }
       ],
-      "title": "Lampe cheval",
-      "category": "creations",
-      "icon": "🎨",
-      "description": "Tête de cheval avec abat-jour assorti",
-      "long_description": "",
+      "description_section": {
+        "title": "Lampe cheval",
+        "category": "creations",
+        "description": "Tête de cheval avec abat-jour assorti"
+      },
       "details": "",
       "dimensions": "",
-      "duration": "",
       "featured": false,
-      "date": ""
+      "date": "",
+      "duration": "",
+      "title": "Lampe cheval",
+      "icon": "🎨",
+      "long_description": "",
+      "image": "/assets/uploads/img_20210615_103505.jpg",
+      "description": "Tête de cheval avec abat-jour assorti",
+      "images_section": {
+        "image": "/assets/uploads/img_20210615_103505.jpg",
+        "photos": [
+          {
+            "photo": "/assets/uploads/lampe-cheval-3.jpg"
+          }
+        ]
+      },
+      "category": "creations"
     }
   ]
 }
