@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lucky-reparations-creations.netlify.app/sitemap.xml
+Sitemap: https://lucky-reparations-creations.pages.dev/sitemap.xml

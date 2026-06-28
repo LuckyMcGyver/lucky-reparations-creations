@@ -43,3 +43,11 @@ V10.1 Back-office simplifié :
 - Sélection d'une image existante.
 - Bouton pour utiliser l'image sélectionnée comme image principale.
 - Bouton pour ajouter l'image sélectionnée à la galerie.
+
+
+V10.2 SEO + Google Search Console :
+- Ajout de la balise de validation Google Search Console.
+- URLs mises à jour vers Cloudflare Pages.
+- robots.txt et sitemap.xml mis à jour.
+- Balises SEO générales : keywords, Open Graph, Twitter Card, theme-color.
+- Données structurées LocalBusiness sur la page d'accueil.
