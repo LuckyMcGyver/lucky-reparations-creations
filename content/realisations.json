@@ -39,6 +39,21 @@
       "featured": true,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782738652986-train-a-vapeur-decoupe-laser.jpg",
+      "photos": [],
+      "title": "Locomotive vapeur",
+      "category": "decoupe",
+      "icon": "✂️",
+      "description": "Locomotive vapeur et son tender",
+      "long_description": "",
+      "details": "MDF",
+      "dimensions": "",
+      "duration": "",
+      "featured": true,
+      "draft": false,
+      "date": ""
     }
   ]
 }
