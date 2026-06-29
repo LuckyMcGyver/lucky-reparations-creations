@@ -51,3 +51,11 @@ V10.2 SEO + Google Search Console :
 - robots.txt et sitemap.xml mis à jour.
 - Balises SEO générales : keywords, Open Graph, Twitter Card, theme-color.
 - Données structurées LocalBusiness sur la page d'accueil.
+
+V10.3 :
+- Icône automatique selon la catégorie.
+- Champ icône non modifiable.
+- Badges de catégorie dans la liste.
+- Compteur photo par réalisation.
+- Suppression remplacée par archivage en brouillon.
+- Aperçu image principale agrandi.

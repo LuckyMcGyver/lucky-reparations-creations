@@ -130,7 +130,9 @@
               <option value="decoupe">Découpe laser</option>
               <option value="creations">Créations</option>
             </select>
-            <label>Icône</label><input id="icon" placeholder="🎨">
+            <label>Icône automatique</label>
+            <div class="autoIconBox"><span id="autoIcon">🎨</span><small>L’icône est choisie automatiquement selon la catégorie.</small></div>
+            <input id="icon" type="hidden" value="🎨">
             <label>Description courte</label><textarea id="description"></textarea>
             <label>Description détaillée</label><textarea id="long_description"></textarea>
             <button type="button" id="suggestBtn">✨ Générer une description simple</button>
