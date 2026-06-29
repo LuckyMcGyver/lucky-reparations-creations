@@ -74,6 +74,34 @@
       "featured": true,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782732757239-carrelage-salle-de-bain.jpg",
+      "photos": [
+        {
+          "photo": "/assets/uploads/1782732997467-sdb17.png",
+          "caption": ""
+        },
+        {
+          "photo": "/assets/uploads/1782733125959-sdb12.png",
+          "caption": ""
+        },
+        {
+          "photo": "/assets/uploads/1782733134093-sdb12.png",
+          "caption": ""
+        }
+      ],
+      "title": "Gravure sur carrelage",
+      "category": "laser",
+      "icon": "🔥",
+      "description": "Gravure sur carreau individuellement",
+      "long_description": "",
+      "details": "Carrelage",
+      "dimensions": "",
+      "duration": "3 mois",
+      "featured": true,
+      "draft": false,
+      "date": ""
     }
   ]
 }
