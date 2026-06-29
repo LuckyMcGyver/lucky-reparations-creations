@@ -67,3 +67,5 @@ V10.4 :
 - Bouton Archiver au lieu de laisser les anciens éléments encombrer la liste.
 - Bouton Réactiver.
 - Suppression définitive séparée et confirmée.
+
+V10.5 : correction navigation des onglets et sécurisation JavaScript.

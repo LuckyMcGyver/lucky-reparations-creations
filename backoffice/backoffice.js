@@ -1,120 +1,47 @@
 
-let data={body:[]}, selected=-1, selectedLibraryImage="", currentListFilter="active";
-const $=id=>document.getElementById(id);
-const CATEGORY_ICONS={reparations:"🔧",impression3d:"🖨️",laser:"🔥",decoupe:"✂️",creations:"🎨"};
-const CATEGORY_LABELS={reparations:"Réparations",impression3d:"Impression 3D",laser:"Gravure laser",decoupe:"Découpe laser",creations:"Créations"};
-function categoryIcon(c){return CATEGORY_ICONS[c]||"🎨"}
-function categoryLabel(c){return CATEGORY_LABELS[c]||c||""}
-function syncIcon(){const ic=categoryIcon($("category")?.value||"creations");if($("icon"))$("icon").value=ic;if($("autoIcon"))$("autoIcon").textContent=ic}
-function emptyItem(){return{image:"",photos:[],title:"",category:"creations",icon:categoryIcon("creations"),description:"",long_description:"",details:"",dimensions:"",duration:"",featured:false,draft:true,date:""}}
-function normalizeItem(item){
-  const d=item.description_section||{}, i=item.images_section||{}, info=item.infos_section||{};
-  const cat=item.category||d.category||"creations";
-  return {image:item.image||i.image||"",photos:item.photos||i.photos||[],title:item.title||d.title||"",category:cat,icon:categoryIcon(cat),description:item.description||d.description||"",long_description:item.long_description||d.long_description||"",details:item.details||info.details||"",dimensions:item.dimensions||info.dimensions||"",duration:item.duration||info.duration||"",featured:item.featured??info.featured??false,draft:item.draft??false,date:item.date||info.date||""}
-}
-function settings(){return {owner:localStorage.getItem("gh_owner")||"LuckyMcGyver",repo:localStorage.getItem("gh_repo")||"lucky-reparations-creations",branch:localStorage.getItem("gh_branch")||"main",token:localStorage.getItem("gh_token")||""}}
-function saveSettings(){localStorage.setItem("gh_owner",$("repoOwner").value.trim());localStorage.setItem("gh_repo",$("repoName").value.trim());localStorage.setItem("gh_branch",$("repoBranch").value.trim());localStorage.setItem("gh_token",$("githubToken").value.trim());updateStatus();alert("Paramètres enregistrés.")}
-function loadSettings(){const s=settings();$("repoOwner").value=s.owner;$("repoName").value=s.repo;$("repoBranch").value=s.branch;$("githubToken").value=s.token;updateStatus()}
-function updateStatus(){const st=$("status");if(settings().token){st.textContent="Connecté à GitHub";st.classList.add("ok")}else{st.textContent="Non connecté à GitHub";st.classList.remove("ok")}}
-async function gh(path,options={}){const s=settings();if(!s.token)throw new Error("Token GitHub manquant.");const res=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}`,{...options,headers:{Authorization:`Bearer ${s.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json",...(options.headers||{})}});const txt=await res.text();if(!res.ok)throw new Error(txt||res.statusText);return txt?JSON.parse(txt):{}}
-async function loadSiteData(){try{const live=await fetch("/content/realisations.json?ts="+Date.now()).then(r=>r.json());data.body=(live.body||[]).map(normalizeItem)}catch(e){data.body=[]}selected=data.body.length?0:-1;render()}
-function saveForm(){
-  if(selected<0)return;
-  const it=data.body[selected];
-  ["image","title","description","long_description","details","dimensions","duration"].forEach(id=>it[id]=$(id).value.trim());
-  it.category=$("category").value;it.icon=categoryIcon(it.category);it.featured=$("featured").checked;it.draft=$("draft")?$("draft").checked:false;it.date=$("date").value||"";
-  it.photos=[...document.querySelectorAll(".photo-row")].map(row=>({photo:row.querySelector(".photo-path").value.trim(),caption:row.querySelector(".photo-caption").value.trim()})).filter(p=>p.photo);
-}
-function loadForm(){
-  if(selected<0){$("formTitle").textContent="Aucune réalisation";return}
-  const it=data.body[selected];$("formTitle").textContent=it.title||"Nouvelle réalisation";
-  ["image","title","description","long_description","details","dimensions","duration"].forEach(id=>$(id).value=it[id]||"");
-  $("category").value=it.category||"creations";it.icon=categoryIcon(it.category);if($("icon"))$("icon").value=it.icon;syncIcon();
-  $("featured").checked=!!it.featured;if($("draft"))$("draft").checked=!!it.draft;$("date").value=(it.date||"").slice(0,10);
-  $("mainPreview").src=it.image||"/assets/logo.png";$("photos").innerHTML="";(it.photos||[]).forEach(addPhotoRow);
-}
-function addPhotoRow(photo={photo:"",caption:""}){
-  const row=document.createElement("div");row.className="photo-row";
-  row.innerHTML=`<img src="${esc(photo.photo||'/assets/logo.png')}" ondblclick="openImageModal(this.src)"><input class="photo-path" placeholder="/assets/uploads/photo.jpg" value="${esc(photo.photo||"")}"><input class="photo-caption" placeholder="Légende" value="${esc(photo.caption||"")}"><button type="button" title="Image principale">⭐</button><button type="button" title="Monter">↑</button><button type="button" title="Descendre">↓</button><button type="button" title="Supprimer">×</button>`;
-  const b=row.querySelectorAll("button");
-  b[0].onclick=()=>{saveForm();const path=row.querySelector(".photo-path").value;const cur=$("image").value;$("image").value=path;row.querySelector(".photo-path").value=cur;$("mainPreview").src=path||"/assets/logo.png";saveForm();render()};
-  b[1].onclick=()=>{if(row.previousElementSibling)$("photos").insertBefore(row,row.previousElementSibling)};
-  b[2].onclick=()=>{if(row.nextElementSibling)$("photos").insertBefore(row.nextElementSibling,row)};
-  b[3].onclick=()=>row.remove();
-  $("photos").appendChild(row);
-}
-function visibleByFilter(it){
-  if(currentListFilter==="all") return true;
-  if(currentListFilter==="active") return !it.draft;
-  if(currentListFilter==="draft") return !!it.draft;
-  if(currentListFilter==="archived") return !!it.draft;
-  if(currentListFilter==="featured") return !!it.featured && !it.draft;
-  return true;
-}
-function renderList(){
-  const q=($("searchList")?.value||"").toLowerCase();
-  const rows=data.body
-    .map((it,i)=>({it,i}))
-    .filter(x=>visibleByFilter(x.it))
-    .filter(x=>!q||(x.it.title+" "+x.it.description+" "+x.it.category).toLowerCase().includes(q));
-  $("list").innerHTML=rows.length ? rows.map(({it,i})=>`<div class="item ${i===selected?'active':''} ${it.draft?'draft':''}" data-i="${i}"><img src="${it.image||'/assets/logo.png'}"><div><strong>${categoryIcon(it.category)} ${esc(it.title||'Nouvelle réalisation')}</strong><small><span class="catBadge">${categoryLabel(it.category)}</span> • ${(it.photos||[]).length+1} photo(s)${it.featured?' • À la une':''}${it.draft?' • Brouillon/archivé':''}</small></div></div>`).join("") : `<div class="emptyList">Aucune réalisation dans ce filtre.</div>`;
-  document.querySelectorAll(".item").forEach(el=>el.onclick=()=>{saveForm();selected=Number(el.dataset.i);render()});
-}
-function renderPhotos(){
-  const imgs=[];data.body.forEach(r=>{if(r.image)imgs.push(r.image);(r.photos||[]).forEach(p=>imgs.push(p.photo))});
-  const unique=[...new Set(imgs)].filter(Boolean);
-  const q=($("librarySearch")?.value||"").toLowerCase();
-  const grid=$("photoGrid");if(!grid)return;
-  grid.innerHTML=unique.filter(src=>src.toLowerCase().includes(q)).map(src=>`<div class="libItem ${src===selectedLibraryImage?'selected':''}" data-src="${esc(src)}"><img src="${esc(src)}" ondblclick="openImageModal(this.src)" title="${esc(src)}"><small>${esc(src.split('/').pop())}</small></div>`).join("");
-  document.querySelectorAll(".libItem").forEach(el=>el.onclick=()=>{selectedLibraryImage=el.dataset.src;renderPhotos()});
-}
-function stats(){$("countTotal").textContent=data.body.length;$("countFeatured").textContent=data.body.filter(x=>x.featured&&!x.draft).length;$("countPhotos").textContent=data.body.reduce((n,x)=>n+1+(x.photos||[]).length,0);if($("countDrafts"))$("countDrafts").textContent=data.body.filter(x=>x.draft).length}
+let data={body:[]},selected=-1,selectedLibraryImage="",currentListFilter="active";
+const $=id=>document.getElementById(id),qsa=s=>[...document.querySelectorAll(s)];
+const IC={reparations:"🔧",impression3d:"🖨️",laser:"🔥",decoupe:"✂️",creations:"🎨"};
+const LB={reparations:"Réparations",impression3d:"Impression 3D",laser:"Gravure laser",decoupe:"Découpe laser",creations:"Créations"};
+function icon(c){return IC[c]||"🎨"} function label(c){return LB[c]||c||""}
+function esc(s){return String(s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function syncIcon(){let i=icon($("category")?.value||"creations"); if($("icon"))$("icon").value=i; if($("autoIcon"))$("autoIcon").textContent=i}
+function emptyItem(){return{image:"",photos:[],title:"",category:"creations",icon:"🎨",description:"",long_description:"",details:"",dimensions:"",duration:"",featured:false,draft:true,date:""}}
+function norm(it){let d=it.description_section||{},im=it.images_section||{},inf=it.infos_section||{},cat=it.category||d.category||"creations";return{image:it.image||im.image||"",photos:it.photos||im.photos||[],title:it.title||d.title||"",category:cat,icon:icon(cat),description:it.description||d.description||"",long_description:it.long_description||d.long_description||"",details:it.details||inf.details||"",dimensions:it.dimensions||inf.dimensions||"",duration:it.duration||inf.duration||"",featured:it.featured??inf.featured??false,draft:it.draft??false,date:it.date||inf.date||""}}
+function settings(){return{owner:localStorage.gh_owner||"LuckyMcGyver",repo:localStorage.gh_repo||"lucky-reparations-creations",branch:localStorage.gh_branch||"main",token:localStorage.gh_token||""}}
+function updateStatus(){let s=$("status"); if(!s)return; if(settings().token){s.textContent="Connecté à GitHub";s.classList.add("ok")}else{s.textContent="Non connecté à GitHub";s.classList.remove("ok")}}
+function loadSettings(){let s=settings(); if($("repoOwner"))$("repoOwner").value=s.owner;if($("repoName"))$("repoName").value=s.repo;if($("repoBranch"))$("repoBranch").value=s.branch;if($("githubToken"))$("githubToken").value=s.token;updateStatus()}
+function saveSettings(){localStorage.gh_owner=$("repoOwner").value.trim();localStorage.gh_repo=$("repoName").value.trim();localStorage.gh_branch=$("repoBranch").value.trim();localStorage.gh_token=$("githubToken").value.trim();updateStatus();alert("Paramètres enregistrés.")}
+async function gh(path,opt={}){let s=settings();if(!s.token)throw Error("Token GitHub manquant.");let r=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}`,{...opt,headers:{Authorization:`Bearer ${s.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json",...(opt.headers||{})}});let t=await r.text();if(!r.ok)throw Error(t||r.statusText);return t?JSON.parse(t):{}}
+async function loadSiteData(){try{let j=await fetch("/content/realisations.json?ts="+Date.now()).then(r=>r.json());data.body=(j.body||[]).map(norm)}catch(e){data.body=[]}selected=data.body.length?0:-1;render()}
+function saveForm(){if(selected<0)return;let it=data.body[selected];["image","title","description","long_description","details","dimensions","duration"].forEach(id=>{if($(id))it[id]=$(id).value.trim()});if($("category"))it.category=$("category").value;it.icon=icon(it.category);if($("featured"))it.featured=$("featured").checked;if($("draft"))it.draft=$("draft").checked;if($("date"))it.date=$("date").value||"";it.photos=qsa(".photo-row").map(r=>({photo:r.querySelector(".photo-path")?.value.trim()||"",caption:r.querySelector(".photo-caption")?.value.trim()||""})).filter(p=>p.photo)}
+function loadForm(){if(selected<0){if($("formTitle"))$("formTitle").textContent="Aucune réalisation";return}let it=data.body[selected];if($("formTitle"))$("formTitle").textContent=it.title||"Nouvelle réalisation";["image","title","description","long_description","details","dimensions","duration"].forEach(id=>{if($(id))$(id).value=it[id]||""});if($("category"))$("category").value=it.category||"creations";syncIcon();if($("featured"))$("featured").checked=!!it.featured;if($("draft"))$("draft").checked=!!it.draft;if($("date"))$("date").value=(it.date||"").slice(0,10);if($("mainPreview"))$("mainPreview").src=it.image||"/assets/logo.png";if($("photos")){$("photos").innerHTML="";(it.photos||[]).forEach(addPhotoRow)}}
+function addPhotoRow(p={photo:"",caption:""}){let c=$("photos");if(!c)return;let r=document.createElement("div");r.className="photo-row";r.innerHTML=`<img src="${esc(p.photo||'/assets/logo.png')}" ondblclick="openImageModal(this.src)"><input class="photo-path" placeholder="/assets/uploads/photo.jpg" value="${esc(p.photo||"")}"><input class="photo-caption" placeholder="Légende" value="${esc(p.caption||"")}"><button type="button">⭐</button><button type="button">↑</button><button type="button">↓</button><button type="button">×</button>`;let b=r.querySelectorAll("button");b[0].onclick=()=>{let path=r.querySelector(".photo-path").value,cur=$("image").value;$("image").value=path;r.querySelector(".photo-path").value=cur;if($("mainPreview"))$("mainPreview").src=path||"/assets/logo.png"};b[1].onclick=()=>{if(r.previousElementSibling)c.insertBefore(r,r.previousElementSibling)};b[2].onclick=()=>{if(r.nextElementSibling)c.insertBefore(r.nextElementSibling,r)};b[3].onclick=()=>r.remove();c.appendChild(r)}
+function visible(it){return currentListFilter==="all"||currentListFilter==="active"&&!it.draft||currentListFilter==="featured"&&it.featured&&!it.draft||(currentListFilter==="draft"||currentListFilter==="archived")&&it.draft}
+function renderList(){let el=$("list");if(!el)return;let q=($("searchList")?.value||"").toLowerCase();let rows=data.body.map((it,i)=>({it,i})).filter(x=>visible(x.it)).filter(x=>!q||(x.it.title+" "+x.it.description+" "+x.it.category).toLowerCase().includes(q));el.innerHTML=rows.length?rows.map(({it,i})=>`<div class="item ${i===selected?'active':''} ${it.draft?'draft':''}" data-i="${i}"><img src="${it.image||'/assets/logo.png'}"><div><strong>${icon(it.category)} ${esc(it.title||'Nouvelle réalisation')}</strong><small><span class="catBadge">${label(it.category)}</span> • ${(it.photos||[]).length+1} photo(s)${it.featured?' • À la une':''}${it.draft?' • Brouillon/archivé':''}</small></div></div>`).join(""):'<div class="emptyList">Aucune réalisation dans ce filtre.</div>';qsa(".item").forEach(x=>x.onclick=()=>{saveForm();selected=+x.dataset.i;render()})}
+function renderPhotos(){let g=$("photoGrid");if(!g)return;let imgs=[];data.body.forEach(r=>{if(r.image)imgs.push(r.image);(r.photos||[]).forEach(p=>imgs.push(p.photo))});let q=($("librarySearch")?.value||"").toLowerCase();g.innerHTML=[...new Set(imgs)].filter(Boolean).filter(s=>s.toLowerCase().includes(q)).map(src=>`<div class="libItem ${src===selectedLibraryImage?'selected':''}" data-src="${esc(src)}"><img src="${esc(src)}" ondblclick="openImageModal(this.src)"><small>${esc(src.split('/').pop())}</small></div>`).join("");qsa(".libItem").forEach(x=>x.onclick=()=>{selectedLibraryImage=x.dataset.src;renderPhotos()})}
+function stats(){if($("countTotal"))$("countTotal").textContent=data.body.length;if($("countFeatured"))$("countFeatured").textContent=data.body.filter(x=>x.featured&&!x.draft).length;if($("countPhotos"))$("countPhotos").textContent=data.body.reduce((n,x)=>n+1+(x.photos||[]).length,0);if($("countDrafts"))$("countDrafts").textContent=data.body.filter(x=>x.draft).length}
 function render(){renderList();loadForm();renderPhotos();stats()}
-function newItem(){saveForm();data.body.push(emptyItem());selected=data.body.length-1;render()}
-function duplicate(){if(selected<0)return;saveForm();const copy=JSON.parse(JSON.stringify(data.body[selected]));copy.title=(copy.title||"Réalisation")+" - copie";data.body.splice(selected+1,0,copy);selected++;render()}
-function archiveSelected(){if(selected<0)return;data.body[selected].draft=true;currentListFilter="active";render();alert("Réalisation archivée. Elle n’apparaîtra plus sur le site après publication.")}
-function restoreSelected(){if(selected<0)return;data.body[selected].draft=false;currentListFilter="active";render();alert("Réalisation réactivée. Pense à publier pour l’afficher sur le site.")}
-function del(){if(selected<0)return;if(!confirm("Supprimer définitivement cette réalisation du back-office ?"))return;data.body.splice(selected,1);selected=data.body.length?Math.max(0,selected-1):-1;render()}
-function cleanData(){return {body:data.body.filter(x=>!x.draft).map(normalizeItem)}}
-function toBase64Utf8(str){return btoa(unescape(encodeURIComponent(str)))}
-async function publish(){try{saveForm();validateBeforePublish();$("publishBtn").disabled=true;$("publishBtn").textContent="Publication...";const path="content/realisations.json";const current=await gh(path);const content=toBase64Utf8(JSON.stringify(cleanData(),null,2));await gh(path,{method:"PUT",body:JSON.stringify({message:"Publication depuis le back-office V10.3",content,sha:current.sha,branch:settings().branch})});alert("Publication envoyée sur GitHub. Cloudflare va redéployer le site automatiquement.")}catch(e){alert("Erreur publication : "+e.message)}finally{$("publishBtn").disabled=false;$("publishBtn").textContent="🚀 Publier"}}
-function validateBeforePublish(){for(const r of data.body){if(r.draft)continue;if(!r.title)throw new Error("Une réalisation publiée n'a pas de titre.");if(!r.image)throw new Error("La réalisation "+r.title+" n'a pas d'image principale.");}}
-function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=reject;r.readAsDataURL(file)})}
-function safeName(name){return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9.]+/g,"-").replace(/-+/g,"-")}
-async function uploadFile(file){const filename=Date.now()+"-"+safeName(file.name);const path="assets/uploads/"+filename;const content=await fileToBase64(file);await gh(path,{method:"PUT",body:JSON.stringify({message:"Ajout image "+filename,content,branch:settings().branch})});return "/"+path}
-async function uploadMain(){try{const f=$("mainUpload").files[0];if(!f)return alert("Choisis une image.");const path=await uploadFile(f);$("image").value=path;$("mainPreview").src=path;saveForm();render();alert("Image envoyée.")}catch(e){alert("Erreur upload : "+e.message)}}
-async function uploadExtra(){try{const files=[...$("extraUpload").files];if(!files.length)return alert("Choisis une ou plusieurs images.");for(const f of files){const path=await uploadFile(f);addPhotoRow({photo:path,caption:""})}saveForm();render();alert("Photos envoyées.")}catch(e){alert("Erreur upload : "+e.message)}}
-function setupDrop(id,inputId,callback){const dz=$(id), input=$(inputId);if(!dz||!input)return;["dragenter","dragover"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("drag")}));["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("drag")}));dz.addEventListener("drop",e=>{input.files=e.dataTransfer.files;callback()})}
+function setFilter(f){currentListFilter=f;qsa(".filterPill").forEach(b=>b.classList.toggle("active",b.dataset.filter===f))}
+function newItem(){saveForm();data.body.push(emptyItem());selected=data.body.length-1;setFilter("draft");render()}
+function duplicate(){if(selected<0)return;saveForm();let c=JSON.parse(JSON.stringify(data.body[selected]));c.title=(c.title||"Réalisation")+" - copie";c.draft=true;data.body.splice(selected+1,0,c);selected++;setFilter("draft");render()}
+function archiveSelected(){if(selected<0)return;data.body[selected].draft=true;setFilter("active");render();alert("Réalisation archivée.")}
+function restoreSelected(){if(selected<0)return;data.body[selected].draft=false;setFilter("active");render();alert("Réalisation réactivée.")}
+function del(){if(selected<0)return;if(confirm("Supprimer définitivement ?")){data.body.splice(selected,1);selected=data.body.length?Math.max(0,selected-1):-1;render()}}
+function cleanData(){return{body:data.body.filter(x=>!x.draft).map(norm)}}
+function b64(s){return btoa(unescape(encodeURIComponent(s)))}
+async function publish(){try{saveForm();for(let r of data.body){if(!r.draft&&(!r.title||!r.image))throw Error("Une réalisation active n'a pas de titre ou d'image.");}$("publishBtn").disabled=true;$("publishBtn").textContent="Publication...";let cur=await gh("content/realisations.json");await gh("content/realisations.json",{method:"PUT",body:JSON.stringify({message:"Publication depuis le back-office V10.5",content:b64(JSON.stringify(cleanData(),null,2)),sha:cur.sha,branch:settings().branch})});alert("Publication envoyée sur GitHub. Cloudflare va redéployer le site automatiquement.")}catch(e){alert("Erreur publication : "+e.message)}finally{if($("publishBtn")){$("publishBtn").disabled=false;$("publishBtn").textContent="🚀 Publier"}}}
+function fileToBase64(f){return new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(f)})}
+function safeName(n){return n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9.]+/g,"-").replace(/-+/g,"-")}
+async function uploadFile(f){let name=Date.now()+"-"+safeName(f.name),path="assets/uploads/"+name;await gh(path,{method:"PUT",body:JSON.stringify({message:"Ajout image "+name,content:await fileToBase64(f),branch:settings().branch})});return "/"+path}
+async function uploadMain(){try{let f=$("mainUpload")?.files[0];if(!f)return alert("Choisis une image.");let p=await uploadFile(f);$("image").value=p;if($("mainPreview"))$("mainPreview").src=p;saveForm();render();alert("Image envoyée.")}catch(e){alert("Erreur upload : "+e.message)}}
+async function uploadExtra(){try{let fs=[...($("extraUpload")?.files||[])];if(!fs.length)return alert("Choisis une image.");for(let f of fs)addPhotoRow({photo:await uploadFile(f),caption:""});saveForm();render();alert("Photos envoyées.")}catch(e){alert("Erreur upload : "+e.message)}}
+function setupDrop(id,inputId,cb){let d=$(id),i=$(inputId);if(!d||!i)return;["dragenter","dragover"].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.classList.add("drag")}));["dragleave","drop"].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.classList.remove("drag")}));d.addEventListener("drop",e=>{i.files=e.dataTransfer.files;cb()})}
 async function testGithub(){try{await gh("content/realisations.json");alert("Connexion GitHub OK.")}catch(e){alert("Connexion impossible : "+e.message)}}
-function suggestText(){const t=$("title").value.trim()||"Cette réalisation";const cat=$("category").value;const map={impression3d:"Pièce réalisée en impression 3D, adaptée au besoin et préparée sur mesure.",reparations:"Diagnostic et remise en état selon la faisabilité de la réparation.",laser:"Personnalisation réalisée par gravure ou découpe laser.",decoupe:"Découpe laser réalisée sur mesure à partir du projet demandé.",creations:"Création personnalisée réalisée selon la demande."};if(!$("description").value)$("description").value=map[cat]||"Réalisation personnalisée.";if(!$("long_description").value)$("long_description").value=t+" : "+(map[cat]||"Projet personnalisé réalisé avec soin.")}
-function addSelectedToGallery(){if(!selectedLibraryImage)return alert("Sélectionne d'abord une image dans la bibliothèque.");addPhotoRow({photo:selectedLibraryImage,caption:""});saveForm();render()}
-function useSelectedAsMain(){if(!selectedLibraryImage)return alert("Sélectionne d'abord une image dans la bibliothèque.");$("image").value=selectedLibraryImage;$("mainPreview").src=selectedLibraryImage;saveForm();render()}
-function openImageModal(src){$("modalImage").src=src;$("imageModal").classList.add("open")}
-function closeImageModal(){$("imageModal").classList.remove("open")}
-function esc(s){return String(s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]))}
-
-function setupListFilters(){
-  document.querySelectorAll(".filterPill").forEach(btn=>{
-    btn.onclick=()=>{
-      saveForm();
-      currentListFilter=btn.dataset.filter;
-      document.querySelectorAll(".filterPill").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      renderList();
-    };
-  });
-}
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{function setupListFilters(){
-  document.querySelectorAll(".filterPill").forEach(btn=>{
-    btn.onclick=()=>{
-      saveForm();
-      currentListFilter=btn.dataset.filter;
-      document.querySelectorAll(".filterPill").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      renderList();
-    };
-  });
-}
-document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.view).classList.add("active")});
-$("settingsBtn").onclick=()=>document.querySelector('[data-view="settings"]').click();$("saveSettingsBtn").onclick=saveSettings;$("testGithubBtn").onclick=testGithub;$("clearTokenBtn").onclick=()=>{localStorage.removeItem("gh_token");loadSettings()};$("publishBtn").onclick=publish;$("newBtn").onclick=newItem;if($("duplicateBtn"))$("duplicateBtn").onclick=duplicate;if($("archiveBtn"))$("archiveBtn").onclick=archiveSelected;if($("restoreBtn"))$("restoreBtn").onclick=restoreSelected;$("deleteBtn").onclick=del;$("addPhotoBtn").onclick=()=>addPhotoRow();$("uploadMainBtn").onclick=uploadMain;$("uploadExtraBtn").onclick=uploadExtra;if($("refreshLibraryBtn"))$("refreshLibraryBtn").onclick=renderPhotos;if($("addSelectedToGalleryBtn"))$("addSelectedToGalleryBtn").onclick=addSelectedToGallery;if($("useAsMainBtn"))$("useAsMainBtn").onclick=useSelectedAsMain;if($("suggestBtn"))$("suggestBtn").onclick=suggestText;$("form").onsubmit=e=>{e.preventDefault();saveForm();render();alert("Enregistré localement. Clique sur Publier pour envoyer sur GitHub.")};$("image").addEventListener("input",()=>{$("mainPreview").src=$("image").value||"/assets/logo.png"});$("category").addEventListener("change",()=>{syncIcon();saveForm();renderList()});if($("searchList"))$("searchList").addEventListener("input",renderList);if($("librarySearch"))$("librarySearch").addEventListener("input",renderPhotos);
-setupListFilters();loadSettings();loadSiteData();setupDrop("mainDrop","mainUpload",uploadMain);setupDrop("extraDrop","extraUpload",uploadExtra);
+function suggestText(){let t=$("title")?.value.trim()||"Cette réalisation",cat=$("category")?.value||"creations",m={impression3d:"Pièce réalisée en impression 3D, adaptée au besoin et préparée sur mesure.",reparations:"Diagnostic et remise en état selon la faisabilité de la réparation.",laser:"Personnalisation réalisée par gravure ou découpe laser.",decoupe:"Découpe laser réalisée sur mesure à partir du projet demandé.",creations:"Création personnalisée réalisée selon la demande."};if($("description")&&!$("description").value)$("description").value=m[cat];if($("long_description")&&!$("long_description").value)$("long_description").value=t+" : "+m[cat]}
+function addSelectedToGallery(){if(!selectedLibraryImage)return alert("Sélectionne une image.");addPhotoRow({photo:selectedLibraryImage,caption:""});saveForm();render()}
+function useSelectedAsMain(){if(!selectedLibraryImage)return alert("Sélectionne une image.");$("image").value=selectedLibraryImage;if($("mainPreview"))$("mainPreview").src=selectedLibraryImage;saveForm();render()}
+function openImageModal(src){if($("imageModal")){$("modalImage").src=src;$("imageModal").classList.add("open")}}
+function closeImageModal(){if($("imageModal"))$("imageModal").classList.remove("open")}
+function showView(id){qsa(".tab").forEach(x=>x.classList.remove("active"));qsa(".view").forEach(x=>x.classList.remove("active"));document.querySelector(`[data-view="${id}"]`)?.classList.add("active");$(id)?.classList.add("active")}
+document.addEventListener("DOMContentLoaded",()=>{qsa(".tab").forEach(b=>b.onclick=()=>showView(b.dataset.view));qsa(".filterPill").forEach(b=>b.onclick=()=>{saveForm();setFilter(b.dataset.filter);renderList()});[["settingsBtn",()=>showView("settings")],["saveSettingsBtn",saveSettings],["testGithubBtn",testGithub],["clearTokenBtn",()=>{localStorage.removeItem("gh_token");loadSettings()}],["publishBtn",publish],["newBtn",newItem],["duplicateBtn",duplicate],["archiveBtn",archiveSelected],["restoreBtn",restoreSelected],["deleteBtn",del],["addPhotoBtn",()=>addPhotoRow()],["uploadMainBtn",uploadMain],["uploadExtraBtn",uploadExtra],["refreshLibraryBtn",renderPhotos],["addSelectedToGalleryBtn",addSelectedToGallery],["useAsMainBtn",useSelectedAsMain],["suggestBtn",suggestText]].forEach(([id,fn])=>{if($(id))$(id).onclick=fn});if($("form"))$("form").onsubmit=e=>{e.preventDefault();saveForm();render();alert("Enregistré localement. Clique sur Publier pour envoyer sur GitHub.")};if($("image"))$("image").oninput=()=>{if($("mainPreview"))$("mainPreview").src=$("image").value||"/assets/logo.png"};if($("category"))$("category").onchange=()=>{syncIcon();saveForm();renderList()};if($("searchList"))$("searchList").oninput=renderList;if($("librarySearch"))$("librarySearch").oninput=renderPhotos;loadSettings();loadSiteData();setupDrop("mainDrop","mainUpload",uploadMain);setupDrop("extraDrop","extraUpload",uploadExtra)});
