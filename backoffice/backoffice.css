@@ -15,3 +15,8 @@ button,input,select,textarea{font:inherit}.topbar{position:sticky;top:0;z-index:
 #restoreBtn{background:rgba(33,197,93,.12);border-color:rgba(33,197,93,.35);color:#b9ffd0}#archiveBtn{background:rgba(255,140,0,.12);border-color:rgba(255,140,0,.35);color:#ffd9a3}
 @media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.photo-row{grid-template-columns:1fr 1fr}.photo-row img{width:100%;height:130px}}
 @media(max-width:900px){.app{grid-template-columns:1fr}.side{display:flex;gap:8px;overflow:auto}.tab{width:auto;white-space:nowrap}.settingsGrid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
+
+/* V11.1 direct actions */
+.view{display:none}
+.view.active{display:block}
+.tab, button{pointer-events:auto!important}

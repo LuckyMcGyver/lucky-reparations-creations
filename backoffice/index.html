@@ -1,123 +1,99 @@
 <!doctype html>
 <html lang="fr-BE">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Back-office V11 | Lucky Réparations & Créations</title>
-  <link rel="icon" href="/assets/logo.png">
-  <link rel="stylesheet" href="/backoffice/backoffice.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Back-office V11.1 | Lucky Réparations & Créations</title>
+<link rel="icon" href="/assets/logo.png">
+<link rel="stylesheet" href="/backoffice/backoffice.css">
 </head>
 <body>
 <header class="topbar">
   <div class="brand">
     <img src="/assets/logo.png" alt="Logo">
-    <div>
-      <strong>Lucky Réparations & Créations</strong>
-      <span>Back-office V11 stable</span>
-    </div>
+    <div><strong>Lucky Réparations & Créations</strong><span>Back-office V11.1</span></div>
   </div>
   <nav>
     <span id="status" class="status">Non connecté à GitHub</span>
-    <button type="button" data-open="settings">⚙️ Paramètres</button>
+    <button type="button" onclick="showView('settings')">⚙️ Paramètres</button>
     <a href="/" target="_blank">Voir le site</a>
-    <button type="button" id="publishBtn" class="primary">🚀 Publier</button>
+    <button type="button" id="publishBtn" class="primary" onclick="publish()">🚀 Publier</button>
   </nav>
 </header>
 
 <main class="app">
   <aside class="side">
-    <button type="button" class="tab active" data-open="dashboard">🏠 Tableau de bord</button>
-    <button type="button" class="tab" data-open="realisations">🖼️ Réalisations</button>
-    <button type="button" class="tab" data-open="settings">⚙️ GitHub</button>
-    <button type="button" class="tab" data-open="help">❓ Aide</button>
+    <button type="button" class="tab active" id="tab-dashboard" onclick="showView('dashboard')">🏠 Tableau de bord</button>
+    <button type="button" class="tab" id="tab-realisations" onclick="showView('realisations')">🖼️ Réalisations</button>
+    <button type="button" class="tab" id="tab-settings" onclick="showView('settings')">⚙️ GitHub</button>
+    <button type="button" class="tab" id="tab-help" onclick="showView('help')">❓ Aide</button>
   </aside>
 
   <section class="main">
     <section class="view active" id="dashboard">
-      <h1>Tableau de bord V11</h1>
-      <p>Version stable : navigation simplifiée, moins de scripts fragiles, publication GitHub conservée.</p>
+      <h1>Tableau de bord V11.1</h1>
+      <p>Version anti-blocage : les boutons utilisent des actions directes.</p>
       <div class="stats">
         <div><strong id="countTotal">0</strong><span>Réalisations</span></div>
         <div><strong id="countFeatured">0</strong><span>À la une</span></div>
         <div><strong id="countPhotos">0</strong><span>Photos</span></div>
         <div><strong id="countDrafts">0</strong><span>Brouillons</span></div>
       </div>
-      <div class="notice good">
-        <h2>V11 active</h2>
-        <p>Ajoute tes réalisations, glisse tes photos, clique sur <strong>Publier</strong> et Cloudflare redéploiera automatiquement.</p>
-      </div>
+      <div class="notice good"><h2>V11.1 active</h2><p>Cette version corrige les boutons inactifs.</p></div>
     </section>
 
     <section class="view" id="realisations">
       <div class="titlebar">
-        <div>
-          <h1>Réalisations</h1>
-          <p>Gestion des réalisations actives et brouillons.</p>
-        </div>
+        <div><h1>Réalisations</h1><p>Gestion des réalisations actives et brouillons.</p></div>
         <div class="actions">
-          <button type="button" id="newBtn" class="primary">+ Nouvelle réalisation</button>
-          <button type="button" id="duplicateBtn">Dupliquer</button>
+          <button type="button" class="primary" onclick="newItem()">+ Nouvelle réalisation</button>
+          <button type="button" onclick="duplicateItem()">Dupliquer</button>
         </div>
       </div>
 
       <div class="layout">
         <div>
-          <input id="searchList" class="search" placeholder="Rechercher une réalisation...">
+          <input id="searchList" class="search" placeholder="Rechercher une réalisation..." oninput="renderList()">
           <div class="listFilters">
-            <button type="button" class="filterPill active" data-filter="active">Actives</button>
-            <button type="button" class="filterPill" data-filter="featured">À la une</button>
-            <button type="button" class="filterPill" data-filter="draft">Brouillons</button>
-            <button type="button" class="filterPill" data-filter="all">Tout</button>
+            <button type="button" class="filterPill active" id="filter-active" onclick="setFilter('active')">Actives</button>
+            <button type="button" class="filterPill" id="filter-featured" onclick="setFilter('featured')">À la une</button>
+            <button type="button" class="filterPill" id="filter-draft" onclick="setFilter('draft')">Brouillons</button>
+            <button type="button" class="filterPill" id="filter-all" onclick="setFilter('all')">Tout</button>
           </div>
           <div id="list" class="list"></div>
         </div>
 
-        <form id="form" class="editor">
+        <form id="form" class="editor" onsubmit="event.preventDefault(); saveForm(); render(); alert('Enregistré localement. Clique sur Publier pour envoyer sur GitHub.');">
           <h2 id="formTitle">Réalisation</h2>
 
           <fieldset>
             <legend>📷 Image principale</legend>
-            <div class="previewBox"><img id="mainPreview" src="/assets/logo.png" alt=""></div>
+            <div class="previewBox"><img id="mainPreview" src="/assets/logo.png" alt="" ondblclick="openImageModal(this.src)"></div>
             <label>Chemin de l'image</label>
-            <input id="image" placeholder="/assets/uploads/photo.jpg">
+            <input id="image" placeholder="/assets/uploads/photo.jpg" oninput="document.getElementById('mainPreview').src=this.value||'/assets/logo.png'">
             <div class="dropzone" id="mainDrop">
-              <strong>Glisse l'image principale ici</strong>
-              <span>ou choisis une image depuis l'ordinateur</span>
+              <strong>Choisir une image principale</strong>
               <input id="mainUpload" type="file" accept="image/*">
             </div>
-            <button type="button" id="uploadMainBtn">Envoyer l'image principale</button>
+            <button type="button" onclick="uploadMain()">Envoyer l'image principale</button>
           </fieldset>
 
           <fieldset>
             <legend>📷 Photos supplémentaires</legend>
             <div class="dropzone" id="extraDrop">
-              <strong>Glisse plusieurs photos ici</strong>
-              <span>Elles seront ajoutées à cette réalisation</span>
+              <strong>Choisir plusieurs photos</strong>
               <input id="extraUpload" type="file" accept="image/*" multiple>
             </div>
-            <button type="button" id="uploadExtraBtn">Envoyer et ajouter les photos</button>
+            <button type="button" onclick="uploadExtra()">Envoyer et ajouter les photos</button>
             <div id="photos"></div>
-            <button type="button" id="addPhotoBtn">+ Ajouter une photo par chemin</button>
-          </fieldset>
-
-          <fieldset>
-            <legend>📚 Bibliothèque intégrée</legend>
-            <p class="hint">Clique sur une image pour la sélectionner. Double-clic pour l’ouvrir en grand.</p>
-            <div class="actions">
-              <button type="button" id="refreshLibraryBtn">Actualiser</button>
-              <button type="button" id="useAsMainBtn">Utiliser comme image principale</button>
-              <button type="button" id="addSelectedToGalleryBtn">Ajouter à la galerie</button>
-            </div>
-            <input id="librarySearch" class="search" placeholder="Rechercher une image...">
-            <div id="photoGrid" class="photoGrid compact"></div>
+            <button type="button" onclick="addPhotoRow()">+ Ajouter une photo par chemin</button>
           </fieldset>
 
           <fieldset>
             <legend>📝 Description</legend>
-            <label>Titre</label>
-            <input id="title" required>
+            <label>Titre</label><input id="title" required>
             <label>Catégorie</label>
-            <select id="category">
+            <select id="category" onchange="syncIcon(); saveForm(); renderList();">
               <option value="reparations">Réparations</option>
               <option value="impression3d">Impression 3D</option>
               <option value="laser">Gravure laser</option>
@@ -125,34 +101,28 @@
               <option value="creations">Créations</option>
             </select>
             <label>Icône automatique</label>
-            <div class="autoIconBox"><span id="autoIcon">🎨</span><small>L’icône suit automatiquement la catégorie.</small></div>
+            <div class="autoIconBox"><span id="autoIcon">🎨</span><small>L’icône suit la catégorie.</small></div>
             <input id="icon" type="hidden">
-            <label>Description courte</label>
-            <textarea id="description"></textarea>
-            <label>Description détaillée</label>
-            <textarea id="long_description"></textarea>
-            <button type="button" id="suggestBtn">✨ Générer une description simple</button>
+            <label>Description courte</label><textarea id="description"></textarea>
+            <label>Description détaillée</label><textarea id="long_description"></textarea>
+            <button type="button" onclick="suggestText()">✨ Générer une description simple</button>
           </fieldset>
 
           <fieldset>
             <legend>⚙️ Infos</legend>
-            <label>Matériau / appareil / support</label>
-            <input id="details">
-            <label>Dimensions</label>
-            <input id="dimensions">
-            <label>Temps de réalisation</label>
-            <input id="duration">
-            <label>Date</label>
-            <input id="date" type="date">
+            <label>Matériau / appareil / support</label><input id="details">
+            <label>Dimensions</label><input id="dimensions">
+            <label>Temps de réalisation</label><input id="duration">
+            <label>Date</label><input id="date" type="date">
             <label class="check"><input id="featured" type="checkbox"> Mettre à la une</label>
-            <label class="check"><input id="draft" type="checkbox"> Brouillon / archivé / ne pas afficher sur le site</label>
+            <label class="check"><input id="draft" type="checkbox"> Brouillon / ne pas afficher</label>
           </fieldset>
 
           <div class="actions">
             <button type="submit" class="primary">💾 Enregistrer localement</button>
-            <button type="button" id="archiveBtn">Archiver</button>
-            <button type="button" id="restoreBtn">Réactiver</button>
-            <button type="button" id="deleteBtn" class="danger">Supprimer définitivement</button>
+            <button type="button" id="archiveBtn" onclick="archiveSelected()">Archiver</button>
+            <button type="button" id="restoreBtn" onclick="restoreSelected()">Réactiver</button>
+            <button type="button" id="deleteBtn" class="danger" onclick="deleteItem()">Supprimer définitivement</button>
           </div>
         </form>
       </div>
@@ -168,25 +138,24 @@
         <label>Token GitHub</label><input id="githubToken" type="password" placeholder="github_pat_...">
       </div>
       <div class="actions">
-        <button type="button" id="saveSettingsBtn" class="primary">Enregistrer les paramètres</button>
-        <button type="button" id="testGithubBtn">Tester la connexion</button>
-        <button type="button" id="clearTokenBtn" class="danger">Effacer le token</button>
+        <button type="button" class="primary" onclick="saveSettings()">Enregistrer les paramètres</button>
+        <button type="button" onclick="testGithub()">Tester la connexion</button>
+        <button type="button" class="danger" onclick="clearToken()">Effacer le token</button>
       </div>
     </section>
 
     <section class="view" id="help">
-      <h1>Aide V11</h1>
+      <h1>Aide V11.1</h1>
       <ol>
-        <li>Les onglets fonctionnent sans dépendre de boutons optionnels.</li>
+        <li>Les boutons sont en action directe.</li>
         <li>Les nouvelles réalisations démarrent en brouillon.</li>
         <li>Pour afficher une réalisation, décoche <strong>Brouillon</strong>, puis clique sur <strong>Publier</strong>.</li>
-        <li>Cloudflare redéploiera automatiquement.</li>
       </ol>
     </section>
   </section>
 </main>
 
-<div class="modal" id="imageModal"><img id="modalImage" src="" alt=""><button type="button" id="closeModalBtn">×</button></div>
+<div class="modal" id="imageModal"><img id="modalImage" src="" alt=""><button type="button" onclick="closeImageModal()">×</button></div>
 <script src="/backoffice/backoffice.js"></script>
 </body>
 </html>

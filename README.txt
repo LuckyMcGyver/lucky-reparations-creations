@@ -70,3 +70,6 @@ V10.4 :
 
 
 V11 stable : back-office reconstruit pour corriger les boutons et onglets inactifs.
+
+
+V11.1 : boutons en onclick direct pour éviter tout blocage d'onglets.
