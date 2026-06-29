@@ -68,4 +68,5 @@ V10.4 :
 - Bouton Réactiver.
 - Suppression définitive séparée et confirmée.
 
-V10.5 : correction navigation des onglets et sécurisation JavaScript.
+
+V11 stable : back-office reconstruit pour corriger les boutons et onglets inactifs.

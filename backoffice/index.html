@@ -1,16 +1,9 @@
 <!doctype html>
 <html lang="fr-BE">
 <head>
-  <meta name="google-site-verification" content="SQKULWK04oQlZVdRZz8H2qoyJoY7vpbumgCuS6Gi54g" />
-  <meta name="author" content="Lucky Réparations & Créations">
-  <meta name="keywords" content="réparation GSM Mouscron, réparation smartphone Tournai, impression 3D Mouscron, gravure laser Tournai, petit électroménager, créations personnalisées">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="fr_BE">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#05070a">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Back-office V10.5.5 | Lucky Réparations & Créations</title>
+  <title>Back-office V11 | Lucky Réparations & Créations</title>
   <link rel="icon" href="/assets/logo.png">
   <link rel="stylesheet" href="/backoffice/backoffice.css">
 </head>
@@ -20,30 +13,29 @@
     <img src="/assets/logo.png" alt="Logo">
     <div>
       <strong>Lucky Réparations & Créations</strong>
-      <span>Back-office V10.5.5</span>
+      <span>Back-office V11 stable</span>
     </div>
   </div>
   <nav>
     <span id="status" class="status">Non connecté à GitHub</span>
-    <button id="settingsBtn">⚙️ Paramètres</button>
+    <button type="button" data-open="settings">⚙️ Paramètres</button>
     <a href="/" target="_blank">Voir le site</a>
-    <button id="publishBtn" class="primary">🚀 Publier</button>
+    <button type="button" id="publishBtn" class="primary">🚀 Publier</button>
   </nav>
 </header>
 
 <main class="app">
   <aside class="side">
-    <button class="tab active" data-view="dashboard">🏠 Tableau de bord</button>
-    <button class="tab" data-view="realisations">🖼️ Réalisations</button>
-    
-    <button class="tab" data-view="settings">⚙️ GitHub</button>
-    <button class="tab" data-view="help">❓ Aide</button>
+    <button type="button" class="tab active" data-open="dashboard">🏠 Tableau de bord</button>
+    <button type="button" class="tab" data-open="realisations">🖼️ Réalisations</button>
+    <button type="button" class="tab" data-open="settings">⚙️ GitHub</button>
+    <button type="button" class="tab" data-open="help">❓ Aide</button>
   </aside>
 
   <section class="main">
-    <div class="view active" id="dashboard">
-      <h1>Tableau de bord V10.5</h1>
-      <p>Gestion complète des réalisations, photos et publication automatique vers GitHub.</p>
+    <section class="view active" id="dashboard">
+      <h1>Tableau de bord V11</h1>
+      <p>Version stable : navigation simplifiée, moins de scripts fragiles, publication GitHub conservée.</p>
       <div class="stats">
         <div><strong id="countTotal">0</strong><span>Réalisations</span></div>
         <div><strong id="countFeatured">0</strong><span>À la une</span></div>
@@ -51,76 +43,70 @@
         <div><strong id="countDrafts">0</strong><span>Brouillons</span></div>
       </div>
       <div class="notice good">
-        <h2>V10 active</h2>
-        <p>Tu peux glisser-déposer des photos, les envoyer dans GitHub, réorganiser les images et publier le site en un clic.</p>
+        <h2>V11 active</h2>
+        <p>Ajoute tes réalisations, glisse tes photos, clique sur <strong>Publier</strong> et Cloudflare redéploiera automatiquement.</p>
       </div>
-    </div>
+    </section>
 
-    <div class="view" id="realisations">
+    <section class="view" id="realisations">
       <div class="titlebar">
         <div>
           <h1>Réalisations</h1>
-          <p>Ajout, modification, archivage et recherche des réalisations.</p>
+          <p>Gestion des réalisations actives et brouillons.</p>
         </div>
         <div class="actions">
-          <button id="newBtn" class="primary">+ Nouvelle réalisation</button>
-          <button id="duplicateBtn">Dupliquer</button>
+          <button type="button" id="newBtn" class="primary">+ Nouvelle réalisation</button>
+          <button type="button" id="duplicateBtn">Dupliquer</button>
         </div>
       </div>
 
       <div class="layout">
         <div>
           <input id="searchList" class="search" placeholder="Rechercher une réalisation...">
-          <div class="listFilters" id="listFilters">
+          <div class="listFilters">
             <button type="button" class="filterPill active" data-filter="active">Actives</button>
             <button type="button" class="filterPill" data-filter="featured">À la une</button>
             <button type="button" class="filterPill" data-filter="draft">Brouillons</button>
-            <button type="button" class="filterPill" data-filter="archived">Archivées</button>
             <button type="button" class="filterPill" data-filter="all">Tout</button>
           </div>
           <div id="list" class="list"></div>
         </div>
 
         <form id="form" class="editor">
-          <h2 id="formTitle">Nouvelle réalisation</h2>
+          <h2 id="formTitle">Réalisation</h2>
 
           <fieldset>
             <legend>📷 Image principale</legend>
-            <div class="previewBox">
-              <img id="mainPreview" src="/assets/logo.png" alt="" ondblclick="openImageModal(this.src)">
-            </div>
+            <div class="previewBox"><img id="mainPreview" src="/assets/logo.png" alt=""></div>
             <label>Chemin de l'image</label>
             <input id="image" placeholder="/assets/uploads/photo.jpg">
-
             <div class="dropzone" id="mainDrop">
               <strong>Glisse l'image principale ici</strong>
               <span>ou choisis une image depuis l'ordinateur</span>
               <input id="mainUpload" type="file" accept="image/*">
             </div>
-
             <button type="button" id="uploadMainBtn">Envoyer l'image principale</button>
           </fieldset>
 
           <fieldset>
-            <legend>📷 Galerie photos</legend>
+            <legend>📷 Photos supplémentaires</legend>
             <div class="dropzone" id="extraDrop">
               <strong>Glisse plusieurs photos ici</strong>
-              <span>Elles seront ajoutées à la galerie de cette réalisation</span>
+              <span>Elles seront ajoutées à cette réalisation</span>
               <input id="extraUpload" type="file" accept="image/*" multiple>
             </div>
             <button type="button" id="uploadExtraBtn">Envoyer et ajouter les photos</button>
-            <p class="hint">Astuce : utilise ↑ et ↓ pour réorganiser les photos. Le bouton ⭐ définit une photo comme image principale.</p>
             <div id="photos"></div>
             <button type="button" id="addPhotoBtn">+ Ajouter une photo par chemin</button>
           </fieldset>
 
           <fieldset>
             <legend>📚 Bibliothèque intégrée</legend>
-            <p class="hint">Toutes les images utilisées par les réalisations. Clique sur une image pour la copier vers la galerie, double-clic pour l’ouvrir en grand.</p>
+            <p class="hint">Clique sur une image pour la sélectionner. Double-clic pour l’ouvrir en grand.</p>
             <div class="actions">
               <button type="button" id="refreshLibraryBtn">Actualiser</button>
-              <button type="button" id="useAsMainBtn">Utiliser l'image sélectionnée comme principale</button>
-              <button type="button" id="addSelectedToGalleryBtn">Ajouter l'image sélectionnée à la galerie</button>
+              <button type="button" id="useAsMainBtn">Utiliser comme image principale</button>
+              <button type="button" id="addSelectedToGalleryBtn">Ajouter à la galerie</button>
             </div>
             <input id="librarySearch" class="search" placeholder="Rechercher une image...">
             <div id="photoGrid" class="photoGrid compact"></div>
@@ -128,7 +114,8 @@
 
           <fieldset>
             <legend>📝 Description</legend>
-            <label>Titre</label><input id="title" required>
+            <label>Titre</label>
+            <input id="title" required>
             <label>Catégorie</label>
             <select id="category">
               <option value="reparations">Réparations</option>
@@ -138,36 +125,42 @@
               <option value="creations">Créations</option>
             </select>
             <label>Icône automatique</label>
-            <div class="autoIconBox"><span id="autoIcon">🎨</span><small>L’icône est choisie automatiquement selon la catégorie.</small></div>
-            <input id="icon" type="hidden" value="🎨">
-            <label>Description courte</label><textarea id="description"></textarea>
-            <label>Description détaillée</label><textarea id="long_description"></textarea>
+            <div class="autoIconBox"><span id="autoIcon">🎨</span><small>L’icône suit automatiquement la catégorie.</small></div>
+            <input id="icon" type="hidden">
+            <label>Description courte</label>
+            <textarea id="description"></textarea>
+            <label>Description détaillée</label>
+            <textarea id="long_description"></textarea>
             <button type="button" id="suggestBtn">✨ Générer une description simple</button>
           </fieldset>
 
           <fieldset>
             <legend>⚙️ Infos</legend>
-            <label>Matériau / appareil / support</label><input id="details">
-            <label>Dimensions</label><input id="dimensions">
-            <label>Temps de réalisation</label><input id="duration">
-            <label>Date</label><input id="date" type="date">
+            <label>Matériau / appareil / support</label>
+            <input id="details">
+            <label>Dimensions</label>
+            <input id="dimensions">
+            <label>Temps de réalisation</label>
+            <input id="duration">
+            <label>Date</label>
+            <input id="date" type="date">
             <label class="check"><input id="featured" type="checkbox"> Mettre à la une</label>
             <label class="check"><input id="draft" type="checkbox"> Brouillon / archivé / ne pas afficher sur le site</label>
           </fieldset>
 
           <div class="actions">
-            <button class="primary" type="submit">💾 Enregistrer localement</button>
+            <button type="submit" class="primary">💾 Enregistrer localement</button>
             <button type="button" id="archiveBtn">Archiver</button>
             <button type="button" id="restoreBtn">Réactiver</button>
-            <button type="button" class="danger" id="deleteBtn">Supprimer définitivement</button>
+            <button type="button" id="deleteBtn" class="danger">Supprimer définitivement</button>
           </div>
         </form>
       </div>
-    </div>
+    </section>
 
-    <div class="view" id="settings">
+    <section class="view" id="settings">
       <h1>Connexion GitHub</h1>
-      <p>Ces paramètres restent enregistrés uniquement dans ton navigateur.</p>
+      <p>Les paramètres restent enregistrés uniquement dans ce navigateur.</p>
       <div class="settingsGrid">
         <label>Propriétaire GitHub</label><input id="repoOwner" value="LuckyMcGyver">
         <label>Dépôt</label><input id="repoName" value="lucky-reparations-creations">
@@ -175,30 +168,25 @@
         <label>Token GitHub</label><input id="githubToken" type="password" placeholder="github_pat_...">
       </div>
       <div class="actions">
-        <button id="saveSettingsBtn" class="primary">Enregistrer les paramètres</button>
-        <button id="testGithubBtn">Tester la connexion</button>
-        <button id="clearTokenBtn" class="danger">Effacer le token</button>
+        <button type="button" id="saveSettingsBtn" class="primary">Enregistrer les paramètres</button>
+        <button type="button" id="testGithubBtn">Tester la connexion</button>
+        <button type="button" id="clearTokenBtn" class="danger">Effacer le token</button>
       </div>
-      <div class="notice">
-        <h2>Token recommandé</h2>
-        <p>Token GitHub limité au dépôt <strong>lucky-reparations-creations</strong> avec <strong>Contents: Read and write</strong>.</p>
-      </div>
-    </div>
+    </section>
 
-    <div class="view" id="help">
-      <h1>Aide V10</h1>
+    <section class="view" id="help">
+      <h1>Aide V11</h1>
       <ol>
-        <li>Va dans <strong>GitHub</strong>, crée un token avec <strong>Contents: Read and write</strong>.</li>
-        <li>Colle-le dans l'onglet <strong>GitHub</strong>.</li>
-        <li>Ajoute ou modifie des réalisations.</li>
-        <li>Glisse des photos dans les zones prévues.</li>
-        <li>Clique sur <strong>🚀 Publier</strong>.</li>
+        <li>Les onglets fonctionnent sans dépendre de boutons optionnels.</li>
+        <li>Les nouvelles réalisations démarrent en brouillon.</li>
+        <li>Pour afficher une réalisation, décoche <strong>Brouillon</strong>, puis clique sur <strong>Publier</strong>.</li>
+        <li>Cloudflare redéploiera automatiquement.</li>
       </ol>
-    </div>
+    </section>
   </section>
 </main>
 
-<div class="modal" id="imageModal"><img id="modalImage" src="" alt=""><button onclick="closeImageModal()">×</button></div>
+<div class="modal" id="imageModal"><img id="modalImage" src="" alt=""><button type="button" id="closeModalBtn">×</button></div>
 <script src="/backoffice/backoffice.js"></script>
 </body>
 </html>
