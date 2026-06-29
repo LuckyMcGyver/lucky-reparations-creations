@@ -56,19 +56,23 @@
       "date": ""
     },
     {
-      "image": "/assets/uploads/1782739131383-aigle-contre-cobra-3.jpg",
+      "image": "/assets/uploads/1782740055352-aigle-contre-cobra-3.jpg",
       "photos": [
         {
-          "photo": "/assets/uploads/1782739148534-aigle-contre-cobra.jpg",
+          "photo": "/assets/uploads/1782740076544-aigle-contre-cobra-2.jpg",
+          "caption": ""
+        },
+        {
+          "photo": "/assets/uploads/1782740078020-aigle-contre-cobra.jpg",
           "caption": ""
         }
       ],
       "title": "Aigle contre Cobra",
       "category": "impression3d",
       "icon": "🖨️",
-      "description": "",
+      "description": "Posture décorative aigle contre cobra",
       "long_description": "",
-      "details": "",
+      "details": "PLA",
       "dimensions": "",
       "duration": "",
       "featured": false,
