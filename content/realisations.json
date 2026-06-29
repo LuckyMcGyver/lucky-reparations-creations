@@ -78,6 +78,21 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782740295450-blason-jeu-de-fer.jpg",
+      "photos": [],
+      "title": "Blason jeu de fer",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "Reproduction du blason de la fédération de jeu de fer de Tournai",
+      "long_description": "",
+      "details": "PLA",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
