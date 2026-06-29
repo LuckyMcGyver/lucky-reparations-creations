@@ -17,6 +17,62 @@
       "dimensions": "",
       "duration": "",
       "featured": true,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782730130011-aigle-contre-cobra-3.jpg",
+      "photos": [
+        {
+          "photo": "/assets/uploads/1782730152369-aigle-contre-cobra.jpg",
+          "caption": ""
+        }
+      ],
+      "title": "Aigle contre Cobra",
+      "category": "impression3d",
+      "icon": "🖨️",
+      "description": "Décoration animalière",
+      "long_description": "Aigle contre Cobra : Pièce réalisée en impression 3D, adaptée au besoin et préparée sur mesure.",
+      "details": "PLA",
+      "dimensions": "",
+      "duration": "",
+      "featured": true,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782730569954-luna-sur-ardoise.jpg",
+      "photos": [],
+      "title": "Ma chienne Luna",
+      "category": "laser",
+      "icon": "🔥",
+      "description": "Luna sur ardoise",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": true,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782731113537-img20260629130339.jpg",
+      "photos": [
+        {
+          "photo": "/assets/uploads/1782731249132-train-a-vapeur-decoupe-laser.jpg",
+          "caption": ""
+        }
+      ],
+      "title": "Train à vapeur",
+      "category": "decoupe",
+      "icon": "✂️",
+      "description": "Maquette de locomotive à vapeur avec son tender",
+      "long_description": "",
+      "details": "MDF",
+      "dimensions": "",
+      "duration": "",
+      "featured": true,
+      "draft": false,
       "date": ""
     }
   ]
