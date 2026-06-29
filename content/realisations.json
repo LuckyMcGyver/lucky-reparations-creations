@@ -93,6 +93,21 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782740649039-jeu-de-fer-fdm.jpg",
+      "photos": [],
+      "title": "Jeu de fer FDM",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "Miniature d'une table jeu de fer",
+      "long_description": "",
+      "details": "PLA",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
