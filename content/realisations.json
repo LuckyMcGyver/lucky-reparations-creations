@@ -54,6 +54,26 @@
       "featured": true,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782739131383-aigle-contre-cobra-3.jpg",
+      "photos": [
+        {
+          "photo": "/assets/uploads/1782739148534-aigle-contre-cobra.jpg",
+          "caption": ""
+        }
+      ],
+      "title": "Aigle contre Cobra",
+      "category": "impression3d",
+      "icon": "🖨️",
+      "description": "",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
