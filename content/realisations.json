@@ -77,7 +77,12 @@
     },
     {
       "image": "/assets/uploads/1782732757239-carrelage-salle-de-bain.jpg",
-      "photos": [],
+      "photos": [
+        {
+          "photo": "/assets/uploads/1782733802491-img20250828190624.jpg",
+          "caption": ""
+        }
+      ],
       "title": "Gravure sur carrelage",
       "category": "laser",
       "icon": "🔥",
