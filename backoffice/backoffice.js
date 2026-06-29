@@ -1,12 +1,12 @@
 
-let data={body:[]}, selected=-1, selectedLibraryImage="";
+let data={body:[]}, selected=-1, selectedLibraryImage="", currentListFilter="active";
 const $=id=>document.getElementById(id);
 const CATEGORY_ICONS={reparations:"🔧",impression3d:"🖨️",laser:"🔥",decoupe:"✂️",creations:"🎨"};
 const CATEGORY_LABELS={reparations:"Réparations",impression3d:"Impression 3D",laser:"Gravure laser",decoupe:"Découpe laser",creations:"Créations"};
 function categoryIcon(c){return CATEGORY_ICONS[c]||"🎨"}
 function categoryLabel(c){return CATEGORY_LABELS[c]||c||""}
 function syncIcon(){const ic=categoryIcon($("category")?.value||"creations");if($("icon"))$("icon").value=ic;if($("autoIcon"))$("autoIcon").textContent=ic}
-function emptyItem(){return{image:"",photos:[],title:"",category:"creations",icon:categoryIcon("creations"),description:"",long_description:"",details:"",dimensions:"",duration:"",featured:false,draft:false,date:""}}
+function emptyItem(){return{image:"",photos:[],title:"",category:"creations",icon:categoryIcon("creations"),description:"",long_description:"",details:"",dimensions:"",duration:"",featured:false,draft:true,date:""}}
 function normalizeItem(item){
   const d=item.description_section||{}, i=item.images_section||{}, info=item.infos_section||{};
   const cat=item.category||d.category||"creations";
@@ -43,10 +43,22 @@ function addPhotoRow(photo={photo:"",caption:""}){
   b[3].onclick=()=>row.remove();
   $("photos").appendChild(row);
 }
+function visibleByFilter(it){
+  if(currentListFilter==="all") return true;
+  if(currentListFilter==="active") return !it.draft;
+  if(currentListFilter==="draft") return !!it.draft;
+  if(currentListFilter==="archived") return !!it.draft;
+  if(currentListFilter==="featured") return !!it.featured && !it.draft;
+  return true;
+}
 function renderList(){
   const q=($("searchList")?.value||"").toLowerCase();
-  $("list").innerHTML=data.body.map((it,i)=>({it,i})).filter(x=>!q||(x.it.title+" "+x.it.description).toLowerCase().includes(q)).map(({it,i})=>`<div class="item ${i===selected?'active':''} ${it.draft?'draft':''}" data-i="${i}"><img src="${it.image||'/assets/logo.png'}"><div><strong>${categoryIcon(it.category)} ${esc(it.title||'Sans titre')}</strong><small><span class="catBadge">${categoryLabel(it.category)}</span> • ${(it.photos||[]).length+1} photo(s)${it.featured?' • À la une':''}${it.draft?' • Brouillon':''}</small></div></div>`).join("");
-  document.querySelectorAll(".item").forEach(el=>el.onclick=()=>{saveForm();selected=Number(el.dataset.i);render()})
+  const rows=data.body
+    .map((it,i)=>({it,i}))
+    .filter(x=>visibleByFilter(x.it))
+    .filter(x=>!q||(x.it.title+" "+x.it.description+" "+x.it.category).toLowerCase().includes(q));
+  $("list").innerHTML=rows.length ? rows.map(({it,i})=>`<div class="item ${i===selected?'active':''} ${it.draft?'draft':''}" data-i="${i}"><img src="${it.image||'/assets/logo.png'}"><div><strong>${categoryIcon(it.category)} ${esc(it.title||'Nouvelle réalisation')}</strong><small><span class="catBadge">${categoryLabel(it.category)}</span> • ${(it.photos||[]).length+1} photo(s)${it.featured?' • À la une':''}${it.draft?' • Brouillon/archivé':''}</small></div></div>`).join("") : `<div class="emptyList">Aucune réalisation dans ce filtre.</div>`;
+  document.querySelectorAll(".item").forEach(el=>el.onclick=()=>{saveForm();selected=Number(el.dataset.i);render()});
 }
 function renderPhotos(){
   const imgs=[];data.body.forEach(r=>{if(r.image)imgs.push(r.image);(r.photos||[]).forEach(p=>imgs.push(p.photo))});
@@ -60,7 +72,9 @@ function stats(){$("countTotal").textContent=data.body.length;$("countFeatured")
 function render(){renderList();loadForm();renderPhotos();stats()}
 function newItem(){saveForm();data.body.push(emptyItem());selected=data.body.length-1;render()}
 function duplicate(){if(selected<0)return;saveForm();const copy=JSON.parse(JSON.stringify(data.body[selected]));copy.title=(copy.title||"Réalisation")+" - copie";data.body.splice(selected+1,0,copy);selected++;render()}
-function del(){if(selected<0)return;if(!confirm("Archiver cette réalisation en brouillon ? Elle ne sera plus affichée après publication."))return;data.body[selected].draft=true;render()}
+function archiveSelected(){if(selected<0)return;data.body[selected].draft=true;currentListFilter="active";render();alert("Réalisation archivée. Elle n’apparaîtra plus sur le site après publication.")}
+function restoreSelected(){if(selected<0)return;data.body[selected].draft=false;currentListFilter="active";render();alert("Réalisation réactivée. Pense à publier pour l’afficher sur le site.")}
+function del(){if(selected<0)return;if(!confirm("Supprimer définitivement cette réalisation du back-office ?"))return;data.body.splice(selected,1);selected=data.body.length?Math.max(0,selected-1):-1;render()}
 function cleanData(){return {body:data.body.filter(x=>!x.draft).map(normalizeItem)}}
 function toBase64Utf8(str){return btoa(unescape(encodeURIComponent(str)))}
 async function publish(){try{saveForm();validateBeforePublish();$("publishBtn").disabled=true;$("publishBtn").textContent="Publication...";const path="content/realisations.json";const current=await gh(path);const content=toBase64Utf8(JSON.stringify(cleanData(),null,2));await gh(path,{method:"PUT",body:JSON.stringify({message:"Publication depuis le back-office V10.3",content,sha:current.sha,branch:settings().branch})});alert("Publication envoyée sur GitHub. Cloudflare va redéployer le site automatiquement.")}catch(e){alert("Erreur publication : "+e.message)}finally{$("publishBtn").disabled=false;$("publishBtn").textContent="🚀 Publier"}}
@@ -79,6 +93,28 @@ function openImageModal(src){$("modalImage").src=src;$("imageModal").classList.a
 function closeImageModal(){$("imageModal").classList.remove("open")}
 function esc(s){return String(s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]))}
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.view).classList.add("active")});
-$("settingsBtn").onclick=()=>document.querySelector('[data-view="settings"]').click();$("saveSettingsBtn").onclick=saveSettings;$("testGithubBtn").onclick=testGithub;$("clearTokenBtn").onclick=()=>{localStorage.removeItem("gh_token");loadSettings()};$("publishBtn").onclick=publish;$("newBtn").onclick=newItem;if($("duplicateBtn"))$("duplicateBtn").onclick=duplicate;$("deleteBtn").onclick=del;$("addPhotoBtn").onclick=()=>addPhotoRow();$("uploadMainBtn").onclick=uploadMain;$("uploadExtraBtn").onclick=uploadExtra;if($("refreshLibraryBtn"))$("refreshLibraryBtn").onclick=renderPhotos;if($("addSelectedToGalleryBtn"))$("addSelectedToGalleryBtn").onclick=addSelectedToGallery;if($("useAsMainBtn"))$("useAsMainBtn").onclick=useSelectedAsMain;if($("suggestBtn"))$("suggestBtn").onclick=suggestText;$("form").onsubmit=e=>{e.preventDefault();saveForm();render();alert("Enregistré localement. Clique sur Publier pour envoyer sur GitHub.")};$("image").addEventListener("input",()=>{$("mainPreview").src=$("image").value||"/assets/logo.png"});$("category").addEventListener("change",()=>{syncIcon();saveForm();renderList()});if($("searchList"))$("searchList").addEventListener("input",renderList);if($("librarySearch"))$("librarySearch").addEventListener("input",renderPhotos);
-loadSettings();loadSiteData();setupDrop("mainDrop","mainUpload",uploadMain);setupDrop("extraDrop","extraUpload",uploadExtra);
+function setupListFilters(){
+  document.querySelectorAll(".filterPill").forEach(btn=>{
+    btn.onclick=()=>{
+      saveForm();
+      currentListFilter=btn.dataset.filter;
+      document.querySelectorAll(".filterPill").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      renderList();
+    };
+  });
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{function setupListFilters(){
+  document.querySelectorAll(".filterPill").forEach(btn=>{
+    btn.onclick=()=>{
+      saveForm();
+      currentListFilter=btn.dataset.filter;
+      document.querySelectorAll(".filterPill").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      renderList();
+    };
+  });
+}
+document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.view).classList.add("active")});
+$("settingsBtn").onclick=()=>document.querySelector('[data-view="settings"]').click();$("saveSettingsBtn").onclick=saveSettings;$("testGithubBtn").onclick=testGithub;$("clearTokenBtn").onclick=()=>{localStorage.removeItem("gh_token");loadSettings()};$("publishBtn").onclick=publish;$("newBtn").onclick=newItem;if($("duplicateBtn"))$("duplicateBtn").onclick=duplicate;if($("archiveBtn"))$("archiveBtn").onclick=archiveSelected;if($("restoreBtn"))$("restoreBtn").onclick=restoreSelected;$("deleteBtn").onclick=del;$("addPhotoBtn").onclick=()=>addPhotoRow();$("uploadMainBtn").onclick=uploadMain;$("uploadExtraBtn").onclick=uploadExtra;if($("refreshLibraryBtn"))$("refreshLibraryBtn").onclick=renderPhotos;if($("addSelectedToGalleryBtn"))$("addSelectedToGalleryBtn").onclick=addSelectedToGallery;if($("useAsMainBtn"))$("useAsMainBtn").onclick=useSelectedAsMain;if($("suggestBtn"))$("suggestBtn").onclick=suggestText;$("form").onsubmit=e=>{e.preventDefault();saveForm();render();alert("Enregistré localement. Clique sur Publier pour envoyer sur GitHub.")};$("image").addEventListener("input",()=>{$("mainPreview").src=$("image").value||"/assets/logo.png"});$("category").addEventListener("change",()=>{syncIcon();saveForm();renderList()});if($("searchList"))$("searchList").addEventListener("input",renderList);if($("librarySearch"))$("librarySearch").addEventListener("input",renderPhotos);
+setupListFilters();loadSettings();loadSiteData();setupDrop("mainDrop","mainUpload",uploadMain);setupDrop("extraDrop","extraUpload",uploadExtra);

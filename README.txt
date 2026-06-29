@@ -59,3 +59,11 @@ V10.3 :
 - Compteur photo par réalisation.
 - Suppression remplacée par archivage en brouillon.
 - Aperçu image principale agrandi.
+
+V10.4 :
+- Liste filtrée par défaut sur les réalisations actives.
+- Filtres : Actives, À la une, Brouillons, Archivées, Tout.
+- Les nouvelles réalisations commencent en brouillon.
+- Bouton Archiver au lieu de laisser les anciens éléments encombrer la liste.
+- Bouton Réactiver.
+- Suppression définitive séparée et confirmée.

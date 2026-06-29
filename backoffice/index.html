@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#05070a">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Back-office V10 | Lucky Réparations & Créations</title>
+  <title>Back-office V10.4 | Lucky Réparations & Créations</title>
   <link rel="icon" href="/assets/logo.png">
   <link rel="stylesheet" href="/backoffice/backoffice.css">
 </head>
@@ -20,7 +20,7 @@
     <img src="/assets/logo.png" alt="Logo">
     <div>
       <strong>Lucky Réparations & Créations</strong>
-      <span>Back-office V10</span>
+      <span>Back-office V10.4</span>
     </div>
   </div>
   <nav>
@@ -60,7 +60,7 @@
       <div class="titlebar">
         <div>
           <h1>Réalisations</h1>
-          <p>Ajout, modification, duplication, suppression et galerie multi-photos.</p>
+          <p>Ajout, modification, archivage et recherche des réalisations.</p>
         </div>
         <div class="actions">
           <button id="newBtn" class="primary">+ Nouvelle réalisation</button>
@@ -71,6 +71,13 @@
       <div class="layout">
         <div>
           <input id="searchList" class="search" placeholder="Rechercher une réalisation...">
+          <div class="listFilters" id="listFilters">
+            <button type="button" class="filterPill active" data-filter="active">Actives</button>
+            <button type="button" class="filterPill" data-filter="featured">À la une</button>
+            <button type="button" class="filterPill" data-filter="draft">Brouillons</button>
+            <button type="button" class="filterPill" data-filter="archived">Archivées</button>
+            <button type="button" class="filterPill" data-filter="all">Tout</button>
+          </div>
           <div id="list" class="list"></div>
         </div>
 
@@ -145,12 +152,14 @@
             <label>Temps de réalisation</label><input id="duration">
             <label>Date</label><input id="date" type="date">
             <label class="check"><input id="featured" type="checkbox"> Mettre à la une</label>
-            <label class="check"><input id="draft" type="checkbox"> Brouillon / ne pas afficher sur le site</label>
+            <label class="check"><input id="draft" type="checkbox"> Brouillon / archivé / ne pas afficher sur le site</label>
           </fieldset>
 
           <div class="actions">
             <button class="primary" type="submit">💾 Enregistrer localement</button>
-            <button type="button" class="danger" id="deleteBtn">Supprimer</button>
+            <button type="button" id="archiveBtn">Archiver</button>
+            <button type="button" id="restoreBtn">Réactiver</button>
+            <button type="button" class="danger" id="deleteBtn">Supprimer définitivement</button>
           </div>
         </form>
       </div>
