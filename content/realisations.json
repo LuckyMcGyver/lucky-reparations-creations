@@ -22,7 +22,12 @@
     },
     {
       "image": "/assets/uploads/1782737462229-carrelage-salle-de-bain.jpg",
-      "photos": [],
+      "photos": [
+        {
+          "photo": "/assets/uploads/1782737985891-img20250828190624.jpg",
+          "caption": ""
+        }
+      ],
       "title": "Carrelage salle de bain",
       "category": "laser",
       "icon": "🔥",
