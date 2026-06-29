@@ -39,6 +39,21 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782730569954-luna-sur-ardoise.jpg",
+      "photos": [],
+      "title": "Ma chienne Luna",
+      "category": "laser",
+      "icon": "🔥",
+      "description": "Luna sur ardoise",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
