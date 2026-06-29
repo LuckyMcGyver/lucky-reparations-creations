@@ -19,6 +19,21 @@
       "featured": true,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782737462229-carrelage-salle-de-bain.jpg",
+      "photos": [],
+      "title": "Carrelage salle de bain",
+      "category": "laser",
+      "icon": "🔥",
+      "description": "Gravure sur carrelage",
+      "long_description": "Gravure carreau par carreau d'image afin de représenter une fresque",
+      "details": "Carrelage",
+      "dimensions": "",
+      "duration": "3 mois",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
