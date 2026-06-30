@@ -76,3 +76,11 @@ V11.1 : boutons en onclick direct pour éviter tout blocage d'onglets.
 
 
 V12 SEO Professionnel : pages SEO locales Mouscron/Tournai, sitemap enrichi, robots.txt, balises SEO, Open Graph, données structurées LocalBusiness/Service.
+
+
+V13 — Mise à jour sans perte :
+- Archive conçue pour ne pas écraser les réalisations existantes.
+- Suppression volontaire de content/realisations.json dans l'archive.
+- Suppression volontaire de assets/uploads dans l'archive.
+- Ajout d'une sauvegarde/restauration JSON dans le back-office.
+- À partir de maintenant, les futures versions doivent être des mises à jour, pas des réinstallations complètes.

@@ -1,0 +1,21 @@
+IMPORTANT — V13 mise à jour sans perte
+
+Cette version est prévue pour mettre à jour le site SANS remplacer tes données.
+
+NE PAS supprimer dans GitHub :
+- content/realisations.json
+- content/avis.json
+- content/actualites.json
+- assets/uploads/
+
+Cette archive ne contient pas ces fichiers/dossiers afin d'éviter d'écraser tes créations, photos et contenus existants.
+
+Installation recommandée :
+1. Décompresse cette archive.
+2. Dans GitHub, remplace les fichiers du site SAUF :
+   - content/realisations.json
+   - content/avis.json
+   - content/actualites.json
+   - assets/uploads/
+3. Commit changes.
+4. Cloudflare Pages redéploiera automatiquement.

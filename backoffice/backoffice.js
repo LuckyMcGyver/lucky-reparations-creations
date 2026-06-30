@@ -59,3 +59,45 @@ window.openImageModal=function(src){$("modalImage").src=src;$("imageModal").clas
 window.closeImageModal=function(){$("imageModal").classList.remove("open")}
 
 document.addEventListener("DOMContentLoaded",()=>{loadSettings();loadSiteData()});
+
+
+// V13 — Sauvegarde/restauration des données de créations
+window.exportDataBackup = function(){
+  try{
+    if(typeof saveForm === "function") saveForm();
+    const backup = {
+      created_at: new Date().toISOString(),
+      type: "lucky-reparations-creations-backup",
+      body: Array.isArray(data?.body) ? data.body : []
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "sauvegarde-realisations-lucky.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(e){
+    alert("Erreur sauvegarde : " + e.message);
+  }
+};
+
+window.restoreDataBackup = function(event){
+  const file = event.target.files && event.target.files[0];
+  if(!file) return;
+  if(!confirm("Restaurer cette sauvegarde dans le back-office ? Pense ensuite à cliquer sur Publier.")) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const restored = JSON.parse(reader.result);
+      const body = restored.body || restored.realisations || restored;
+      if(!Array.isArray(body)) throw new Error("Format de sauvegarde non reconnu.");
+      data.body = body.map(typeof normalizeItem === "function" ? normalizeItem : x => x);
+      selected = data.body.length ? 0 : -1;
+      if(typeof render === "function") render();
+      alert("Sauvegarde restaurée dans le back-office. Clique sur Publier pour l'envoyer sur GitHub.");
+    }catch(e){
+      alert("Erreur restauration : " + e.message);
+    }
+  };
+  reader.readAsText(file);
+};

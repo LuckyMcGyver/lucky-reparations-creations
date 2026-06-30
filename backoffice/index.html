@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Back-office V12 | Lucky Réparations & Créations</title>
+<title>Back-office V13 | Lucky Réparations & Créations</title>
 <link rel="icon" href="/assets/logo.png">
 <link rel="stylesheet" href="/backoffice/backoffice.css">
 </head>
@@ -11,7 +11,7 @@
 <header class="topbar">
   <div class="brand">
     <img src="/assets/logo.png" alt="Logo">
-    <div><strong>Lucky Réparations & Créations</strong><span>Back-office V12</span></div>
+    <div><strong>Lucky Réparations & Créations</strong><span>Back-office V13</span></div>
   </div>
   <nav>
     <span id="status" class="status">Non connecté à GitHub</span>
@@ -31,7 +31,7 @@
 
   <section class="main">
     <section class="view active" id="dashboard">
-      <h1>Tableau de bord V12</h1>
+      <h1>Tableau de bord V13</h1>
       <p>Version anti-blocage : les boutons utilisent des actions directes.</p>
       <div class="stats">
         <div><strong id="countTotal">0</strong><span>Réalisations</span></div>
@@ -40,6 +40,18 @@
         <div><strong id="countDrafts">0</strong><span>Brouillons</span></div>
       </div>
       <div class="notice good"><h2>V11.1 active</h2><p>Cette version corrige les boutons inactifs.</p></div>
+    
+      <div class="notice">
+        <h2>💾 Sauvegarde / restauration</h2>
+        <p>Avant une mise à jour importante, tu peux sauvegarder tes réalisations dans un fichier JSON.</p>
+        <div class="actions">
+          <button type="button" onclick="exportDataBackup()">Télécharger la sauvegarde</button>
+          <label class="importLabel">Restaurer une sauvegarde
+            <input type="file" id="restoreFile" accept="application/json" onchange="restoreDataBackup(event)">
+          </label>
+        </div>
+      </div>
+
     </section>
 
     <section class="view" id="realisations">
