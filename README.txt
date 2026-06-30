@@ -73,3 +73,6 @@ V11 stable : back-office reconstruit pour corriger les boutons et onglets inacti
 
 
 V11.1 : boutons en onclick direct pour éviter tout blocage d'onglets.
+
+
+V12 SEO Professionnel : pages SEO locales Mouscron/Tournai, sitemap enrichi, robots.txt, balises SEO, Open Graph, données structurées LocalBusiness/Service.

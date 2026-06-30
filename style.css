@@ -11,3 +11,12 @@ section{padding:74px 0}.section-title{text-align:center;margin-bottom:38px}.sect
 input,select,textarea{width:100%;background:#0d1118;color:white;border:1px solid var(--line);border-radius:16px;padding:14px;font:inherit}textarea{min-height:150px}form{display:grid;gap:14px}.contact-list{display:grid;gap:12px}.contact-list a,.contact-list div{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:16px;padding:14px}.form-note{color:var(--muted);font-size:.95rem;margin-top:-8px}
 footer{padding:28px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);background:#05070a}
 @media(max-width:900px){.links{display:none;position:absolute;left:16px;right:16px;top:76px;flex-direction:column;align-items:flex-start;background:#080b10;border:1px solid var(--line);border-radius:18px;padding:18px}.links.open{display:flex}.menu-btn{display:block}.quick,.services,.gallery,.split,.contact-grid{grid-template-columns:1fr}.gallery-item{height:300px}.hero{min-height:600px}.lightbox-prev,.lightbox-next{display:none}}
+
+
+/* V12 SEO landing pages */
+.seo-page .hero.compact{padding:80px 20px;background:linear-gradient(135deg,rgba(11,109,255,.2),rgba(255,140,0,.14)),#070a10}
+.seo-page .container{max-width:1100px;margin:auto;padding:30px 20px}
+.seo-page .pill{display:inline-block;padding:10px 16px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(0,0,0,.35);font-weight:800}
+.seo-page h1{font-size:clamp(2.4rem,6vw,5rem);line-height:1.05;margin:20px 0}
+.seo-content{font-size:1.08rem;line-height:1.7}
+.seo-content h2{margin-top:30px}
