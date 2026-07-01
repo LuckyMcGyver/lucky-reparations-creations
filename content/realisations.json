@@ -39,6 +39,21 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782893967754-img20240714201752.jpg",
+      "photos": [],
+      "title": "Camion Scania",
+      "category": "decoupe",
+      "icon": "✂️",
+      "description": "Tracteur de semi Scania",
+      "long_description": "",
+      "details": "MDF",
+      "dimensions": "",
+      "duration": "2 semaines",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
