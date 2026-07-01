@@ -99,6 +99,21 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782895179757-img-20240417-150244.jpg",
+      "photos": [],
+      "title": "Rugby Club de Toulon",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "Tableau réalisé pour un supporter du RCT",
+      "long_description": "",
+      "details": "PLA",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
