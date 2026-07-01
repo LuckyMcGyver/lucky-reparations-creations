@@ -204,6 +204,66 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782899876482-img20230613162305.jpg",
+      "photos": [],
+      "title": "Enseigne lumineuse",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782899911418-img20230718131622.jpg",
+      "photos": [],
+      "title": "Cadeau personnalisé",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "Famille que j'adore",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782899927581-img20230801141023.jpg",
+      "photos": [],
+      "title": "trompe l'oeil",
+      "category": "impression3d",
+      "icon": "🖨️",
+      "description": "Contient un visage, un oiseau et une panthère",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782900074572-img20231027114127.jpg",
+      "photos": [],
+      "title": "Boite à capsules dolce gusto",
+      "category": "decoupe",
+      "icon": "✂️",
+      "description": "",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
