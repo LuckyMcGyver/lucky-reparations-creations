@@ -84,3 +84,11 @@ V13 — Mise à jour sans perte :
 - Suppression volontaire de assets/uploads dans l'archive.
 - Ajout d'une sauvegarde/restauration JSON dans le back-office.
 - À partir de maintenant, les futures versions doivent être des mises à jour, pas des réinstallations complètes.
+
+
+V13.1 — Module Actualités :
+- Onglet Actualités dans le back-office.
+- Ajouter, modifier, supprimer des actualités.
+- Publication automatique vers content/actualites.json.
+- Page Actualités alimentée automatiquement par content/actualites.json.
+- Archive toujours sans content/realisations.json ni assets/uploads pour éviter toute perte.

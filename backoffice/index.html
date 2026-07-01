@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Back-office V13 | Lucky Réparations & Créations</title>
+<title>Back-office V13.1 | Lucky Réparations & Créations</title>
 <link rel="icon" href="/assets/logo.png">
 <link rel="stylesheet" href="/backoffice/backoffice.css">
 </head>
@@ -11,7 +11,7 @@
 <header class="topbar">
   <div class="brand">
     <img src="/assets/logo.png" alt="Logo">
-    <div><strong>Lucky Réparations & Créations</strong><span>Back-office V13</span></div>
+    <div><strong>Lucky Réparations & Créations</strong><span>Back-office V13.1</span></div>
   </div>
   <nav>
     <span id="status" class="status">Non connecté à GitHub</span>
@@ -25,13 +25,14 @@
   <aside class="side">
     <button type="button" class="tab active" id="tab-dashboard" onclick="showView('dashboard')">🏠 Tableau de bord</button>
     <button type="button" class="tab" id="tab-realisations" onclick="showView('realisations')">🖼️ Réalisations</button>
+    <button type="button" class="tab" id="tab-actualites" onclick="showView('actualites')">📰 Actualités</button>
     <button type="button" class="tab" id="tab-settings" onclick="showView('settings')">⚙️ GitHub</button>
     <button type="button" class="tab" id="tab-help" onclick="showView('help')">❓ Aide</button>
   </aside>
 
   <section class="main">
     <section class="view active" id="dashboard">
-      <h1>Tableau de bord V13</h1>
+      <h1>Tableau de bord V13.1</h1>
       <p>Version anti-blocage : les boutons utilisent des actions directes.</p>
       <div class="stats">
         <div><strong id="countTotal">0</strong><span>Réalisations</span></div>
@@ -135,6 +136,51 @@
             <button type="button" id="archiveBtn" onclick="archiveSelected()">Archiver</button>
             <button type="button" id="restoreBtn" onclick="restoreSelected()">Réactiver</button>
             <button type="button" id="deleteBtn" class="danger" onclick="deleteItem()">Supprimer définitivement</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+
+    <section class="view" id="actualites">
+      <div class="titlebar">
+        <div>
+          <h1>Actualités</h1>
+          <p>Ajout, modification et suppression des actualités affichées sur le site.</p>
+        </div>
+        <div class="actions">
+          <button type="button" class="primary" onclick="newNews()">+ Nouvelle actualité</button>
+          <button type="button" onclick="loadNewsData()">Recharger</button>
+        </div>
+      </div>
+
+      <div class="layout">
+        <div>
+          <input id="searchNews" class="search" placeholder="Rechercher une actualité..." oninput="renderNewsList()">
+          <div id="newsList" class="list"></div>
+        </div>
+
+        <form id="newsForm" class="editor" onsubmit="event.preventDefault(); saveNewsForm(); renderNews(); alert('Actualité enregistrée localement. Clique sur Publier pour l’envoyer sur GitHub.');">
+          <h2 id="newsFormTitle">Actualité</h2>
+
+          <fieldset>
+            <legend>📰 Contenu</legend>
+            <label>Titre</label>
+            <input id="newsTitle" required>
+            <label>Date</label>
+            <input id="newsDate" type="date">
+            <label>Résumé / texte court</label>
+            <textarea id="newsExcerpt"></textarea>
+            <label>Image</label>
+            <input id="newsImage" placeholder="/assets/uploads/photo.jpg">
+            <div class="previewBox">
+              <img id="newsPreview" src="/assets/logo.png" alt="" ondblclick="openImageModal(this.src)">
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit" class="primary">💾 Enregistrer localement</button>
+            <button type="button" class="danger" onclick="deleteNews()">Supprimer cette actualité</button>
           </div>
         </form>
       </div>

@@ -24,3 +24,8 @@ button,input,select,textarea{font:inherit}.topbar{position:sticky;top:0;z-index:
 /* V13 sauvegarde */
 .importLabel{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#121826;color:var(--text);border-radius:14px;padding:10px 14px;cursor:pointer;font-weight:800}
 .importLabel input{display:none}
+
+/* V13.1 actualites */
+#actualites .layout{display:grid;grid-template-columns:350px 1fr;gap:22px}
+#actualites .previewBox img{width:230px;height:165px;object-fit:cover;border-radius:16px;border:1px solid var(--line);background:#000}
+@media(max-width:900px){#actualites .layout{grid-template-columns:1fr}}

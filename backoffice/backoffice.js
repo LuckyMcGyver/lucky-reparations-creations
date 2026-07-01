@@ -101,3 +101,128 @@ window.restoreDataBackup = function(event){
   };
   reader.readAsText(file);
 };
+
+
+/* V13.1 — Module Actualités */
+let newsData = { body: [] };
+let selectedNews = -1;
+
+function emptyNews(){
+  return {
+    title: "",
+    date: new Date().toISOString().slice(0,10),
+    excerpt: "",
+    image: "/assets/logo.png"
+  };
+}
+
+function normalizeNews(item){
+  return {
+    title: item.title || "",
+    date: (item.date || "").slice(0,10),
+    excerpt: item.excerpt || item.text || item.description || "",
+    image: item.image || "/assets/logo.png"
+  };
+}
+
+async function loadNewsData(){
+  try{
+    const live = await fetch("/content/actualites.json?ts=" + Date.now()).then(r => r.json());
+    newsData.body = (live.body || live.actualites || []).map(normalizeNews);
+  }catch(e){
+    newsData.body = [];
+  }
+  selectedNews = newsData.body.length ? 0 : -1;
+  renderNews();
+}
+
+function saveNewsForm(){
+  if(selectedNews < 0) return;
+  const item = newsData.body[selectedNews];
+  item.title = document.getElementById("newsTitle")?.value.trim() || "";
+  item.date = document.getElementById("newsDate")?.value || "";
+  item.excerpt = document.getElementById("newsExcerpt")?.value.trim() || "";
+  item.image = document.getElementById("newsImage")?.value.trim() || "/assets/logo.png";
+}
+
+function loadNewsForm(){
+  const title = document.getElementById("newsFormTitle");
+  if(selectedNews < 0){
+    if(title) title.textContent = "Aucune actualité";
+    return;
+  }
+  const item = newsData.body[selectedNews];
+  if(title) title.textContent = item.title || "Nouvelle actualité";
+  if(document.getElementById("newsTitle")) document.getElementById("newsTitle").value = item.title || "";
+  if(document.getElementById("newsDate")) document.getElementById("newsDate").value = (item.date || "").slice(0,10);
+  if(document.getElementById("newsExcerpt")) document.getElementById("newsExcerpt").value = item.excerpt || "";
+  if(document.getElementById("newsImage")) document.getElementById("newsImage").value = item.image || "/assets/logo.png";
+  if(document.getElementById("newsPreview")) document.getElementById("newsPreview").src = item.image || "/assets/logo.png";
+}
+
+function renderNewsList(){
+  const list = document.getElementById("newsList");
+  if(!list) return;
+  const q = (document.getElementById("searchNews")?.value || "").toLowerCase();
+  const rows = newsData.body
+    .map((item, i) => ({item, i}))
+    .filter(x => !q || (x.item.title + " " + x.item.excerpt).toLowerCase().includes(q));
+
+  list.innerHTML = rows.length ? rows.map(({item, i}) => `
+    <div class="item ${i === selectedNews ? "active" : ""}" onclick="selectNews(${i})">
+      <img src="${item.image || "/assets/logo.png"}">
+      <div>
+        <strong>📰 ${esc(item.title || "Nouvelle actualité")}</strong>
+        <small>${item.date || "Sans date"}</small>
+      </div>
+    </div>
+  `).join("") : `<div class="emptyList">Aucune actualité.</div>`;
+}
+
+function renderNews(){
+  renderNewsList();
+  loadNewsForm();
+}
+
+function selectNews(i){
+  saveNewsForm();
+  selectedNews = i;
+  renderNews();
+}
+
+function newNews(){
+  saveNewsForm();
+  newsData.body.unshift(emptyNews());
+  selectedNews = 0;
+  if(typeof showView === "function") showView("actualites");
+  renderNews();
+}
+
+function deleteNews(){
+  if(selectedNews < 0) return;
+  if(!confirm("Supprimer cette actualité ?")) return;
+  newsData.body.splice(selectedNews, 1);
+  selectedNews = newsData.body.length ? Math.max(0, selectedNews - 1) : -1;
+  renderNews();
+}
+
+function cleanNewsData(){
+  return {
+    body: newsData.body
+      .map(normalizeNews)
+      .filter(n => n.title || n.excerpt)
+      .sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0))
+  };
+}
+
+
+document.addEventListener("DOMContentLoaded", function(){
+  if(typeof loadNewsData === "function") loadNewsData();
+  const newsImage = document.getElementById("newsImage");
+  if(newsImage){
+    newsImage.addEventListener("input", function(){
+      const prev = document.getElementById("newsPreview");
+      if(prev) prev.src = this.value || "/assets/logo.png";
+    });
+  }
+});
