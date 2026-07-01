@@ -1,0 +1,10 @@
+{
+  "body": [
+    {
+      "title": "Exemple d'actualité",
+      "date": "2026-07-01",
+      "excerpt": "Cette actualité est un exemple. Les vraies actualités seront publiées depuis le back-office.",
+      "image": "/assets/logo.png"
+    }
+  ]
+}

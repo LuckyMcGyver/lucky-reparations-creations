@@ -48,7 +48,8 @@ window.deleteItem=function(){if(selected<0)return;if(!confirm("Supprimer défini
 
 function toBase64Utf8(str){return btoa(unescape(encodeURIComponent(str)))}
 function cleanData(){return{body:data.body.filter(x=>!x.draft).map(normalizeItem)}}
-window.publish=async function(){try{saveForm();for(const r of data.body){if(!r.draft&&(!r.title||!r.image))throw new Error("Une réalisation publiée doit avoir un titre et une image principale.")}const btn=$("publishBtn");btn.disabled=true;btn.textContent="Publication...";const current=await gh("content/realisations.json");const content=toBase64Utf8(JSON.stringify(cleanData(),null,2));await gh("content/realisations.json",{method:"PUT",body:JSON.stringify({message:"Publication depuis le back-office V11.1",content,sha:current.sha,branch:settings().branch})});alert("Publication envoyée sur GitHub. Cloudflare va redéployer le site automatiquement.")}catch(e){alert("Erreur publication : "+e.message)}finally{$("publishBtn").disabled=false;$("publishBtn").textContent="🚀 Publier"}}
+window.publish=async function(){try{saveForm();for(const r of data.body){if(!r.draft&&(!r.title||!r.image))throw new Error("Une réalisation publiée doit avoir un titre et une image principale.")}const btn=$("publishBtn");btn.disabled=true;btn.textContent="Publication...";const current=await gh("content/realisations.json");const content=toBase64Utf8(JSON.stringify(cleanData(),null,2));await gh("content/realisations.json",{method:"PUT",body:JSON.stringify({message:"Publication depuis le back-office V11.1",content,sha:current.sha,branch:settings().branch})});await forcePublishActualitesV132();
+alert("Publication envoyée sur GitHub. Cloudflare va redéployer le site automatiquement.")}catch(e){alert("Erreur publication : "+e.message)}finally{$("publishBtn").disabled=false;$("publishBtn").textContent="🚀 Publier"}}
 function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=reject;r.readAsDataURL(file)})}
 function safeName(name){return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9.]+/g,"-").replace(/-+/g,"-")}
 async function uploadFile(file){const filename=Date.now()+"-"+safeName(file.name);const path="assets/uploads/"+filename;const content=await fileToBase64(file);await gh(path,{method:"PUT",body:JSON.stringify({message:"Ajout image "+filename,content,branch:settings().branch})});return "/"+path}
@@ -226,3 +227,22 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   }
 });
+
+
+/* V13.2 — Publication fiable des actualités */
+async function forcePublishActualitesV132(){
+  if(typeof saveNewsForm === "function") saveNewsForm();
+  if(typeof cleanNewsData !== "function") return;
+  const content = toBase64Utf8(JSON.stringify(cleanNewsData(), null, 2));
+  const current = await gh("content/actualites.json").catch(() => null);
+  const payload = {
+    message: "Mise à jour des actualités depuis le back-office V13.2",
+    content: content,
+    branch: settings().branch
+  };
+  if(current && current.sha) payload.sha = current.sha;
+  await gh("content/actualites.json", {
+    method: "PUT",
+    body: JSON.stringify(payload)
+  });
+}

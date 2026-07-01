@@ -92,3 +92,10 @@ V13.1 — Module Actualités :
 - Publication automatique vers content/actualites.json.
 - Page Actualités alimentée automatiquement par content/actualites.json.
 - Archive toujours sans content/realisations.json ni assets/uploads pour éviter toute perte.
+
+
+V13.2 — Correction Actualités :
+- Page /actualites/ autonome qui lit directement /content/actualites.json.
+- Affichage clair si aucune actualité n'est encore publiée.
+- Publication GitHub plus fiable pour content/actualites.json.
+- Ajout d'un exemple _actualites_exemple.json sans écraser les données.
