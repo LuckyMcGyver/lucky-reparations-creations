@@ -144,6 +144,66 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782899743524-img-20210902-123507.jpg",
+      "photos": [],
+      "title": "Basilique de Montmartre",
+      "category": "impression3d",
+      "icon": "🖨️",
+      "description": "",
+      "long_description": "",
+      "details": "PLA",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782899775172-img-20220201-103522.jpg",
+      "photos": [],
+      "title": "Planche jeu de fer",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "Reproduction au 1:7",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782899809687-img20221222000205.jpg",
+      "photos": [],
+      "title": "Casse-noisette",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
+    },
+    {
+      "image": "/assets/uploads/1782899840823-img20230315174053.jpg",
+      "photos": [],
+      "title": "Trophées",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "Trophées tournoi 3x20 jeu de fer",
+      "long_description": "",
+      "details": "",
+      "dimensions": "",
+      "duration": "",
+      "featured": false,
+      "draft": false,
+      "date": ""
     }
   ]
 }
