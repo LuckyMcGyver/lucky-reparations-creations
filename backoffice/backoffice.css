@@ -29,3 +29,17 @@ button,input,select,textarea{font:inherit}.topbar{position:sticky;top:0;z-index:
 #actualites .layout{display:grid;grid-template-columns:350px 1fr;gap:22px}
 #actualites .previewBox img{width:230px;height:165px;object-fit:cover;border-radius:16px;border:1px solid var(--line);background:#000}
 @media(max-width:900px){#actualites .layout{grid-template-columns:1fr}}
+
+/* V14 — Avis et SEO */
+.reviewItem{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:14px;cursor:pointer}
+.reviewItem.active{outline:3px solid rgba(11,109,255,.45)}
+.reviewItem strong,.reviewItem small{display:block}
+.reviewItem small,.reviewItem p{color:var(--muted)}
+.seoGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:22px 0}
+.seoCheck{display:flex;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
+.seoCheck strong,.seoCheck small{display:block}.seoCheck small{color:var(--muted);margin-top:4px}
+.seoDot{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;font-size:1.4rem;font-weight:900}
+.seoDot.waiting{background:rgba(255,255,255,.08);color:var(--muted)}
+.seoDot.ok{background:rgba(33,197,93,.16);color:#91ffb1}.seoDot.bad{background:rgba(255,77,93,.16);color:#ff9ca6}
+.boLink{border:1px solid var(--line);background:#121826;color:var(--text);border-radius:14px;padding:10px 14px;text-decoration:none;font-weight:800}
+@media(max-width:900px){.seoGrid{grid-template-columns:1fr}}

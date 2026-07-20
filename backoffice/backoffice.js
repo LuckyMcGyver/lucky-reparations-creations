@@ -1,248 +1,99 @@
+let data={body:[]},selected=-1,currentListFilter="active";
+let newsData={body:[]},selectedNews=-1;
+let reviewsData={body:[]},selectedReview=-1;
 
-let data={body:[]}, selected=-1, currentListFilter="active";
-const CATEGORY_ICONS={reparations:"🔧",impression3d:"🖨️",laser:"🔥",decoupe:"✂️",creations:"🎨"};
-const CATEGORY_LABELS={reparations:"Réparations",impression3d:"Impression 3D",laser:"Gravure laser",decoupe:"Découpe laser",creations:"Créations"};
 const $=id=>document.getElementById(id);
 const $$=sel=>[...document.querySelectorAll(sel)];
-function esc(s){return String(s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
-function categoryIcon(c){return CATEGORY_ICONS[c]||"🎨"}
-function categoryLabel(c){return CATEGORY_LABELS[c]||c||""}
+const SITE_URL="https://lucky-reparations-creations.pages.dev";
+const CATEGORY_ICONS={reparations:"🔧",impression3d:"🖨️",laser:"🔥",decoupe:"✂️",creations:"🎨"};
+const CATEGORY_LABELS={reparations:"Réparations",impression3d:"Impression 3D",laser:"Gravure laser",decoupe:"Découpe laser",creations:"Créations"};
 
-window.showView=function(id){
-  $$(".view").forEach(v=>v.classList.remove("active"));
-  $$(".tab").forEach(t=>t.classList.remove("active"));
-  if($(id)) $(id).classList.add("active");
-  const tab=$("tab-"+id); if(tab) tab.classList.add("active");
-};
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function xmlEsc(s){return String(s??"").replace(/[<>&'"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[c]));}
+function categoryIcon(c){return CATEGORY_ICONS[c]||"🎨";}
+function categoryLabel(c){return CATEGORY_LABELS[c]||c||"";}
+function showView(id){$$(".view").forEach(v=>v.classList.remove("active"));$$(".tab").forEach(t=>t.classList.remove("active"));if($(id))$(id).classList.add("active");if($("tab-"+id))$("tab-"+id).classList.add("active");}
+window.showView=showView;
 
-function settings(){return{owner:localStorage.getItem("gh_owner")||"LuckyMcGyver",repo:localStorage.getItem("gh_repo")||"lucky-reparations-creations",branch:localStorage.getItem("gh_branch")||"main",token:localStorage.getItem("gh_token")||""}}
-function updateStatus(){const st=$("status"); if(!st)return; if(settings().token){st.textContent="Connecté à GitHub";st.classList.add("ok")}else{st.textContent="Non connecté à GitHub";st.classList.remove("ok")}}
-window.loadSettings=function(){const s=settings(); if($("repoOwner"))$("repoOwner").value=s.owner;if($("repoName"))$("repoName").value=s.repo;if($("repoBranch"))$("repoBranch").value=s.branch;if($("githubToken"))$("githubToken").value=s.token;updateStatus();}
-window.saveSettings=function(){localStorage.setItem("gh_owner",$("repoOwner").value.trim());localStorage.setItem("gh_repo",$("repoName").value.trim());localStorage.setItem("gh_branch",$("repoBranch").value.trim());localStorage.setItem("gh_token",$("githubToken").value.trim());updateStatus();alert("Paramètres enregistrés.")}
-window.clearToken=function(){localStorage.removeItem("gh_token");loadSettings();}
+function settings(){return{owner:localStorage.getItem("gh_owner")||"LuckyMcGyver",repo:localStorage.getItem("gh_repo")||"lucky-reparations-creations",branch:localStorage.getItem("gh_branch")||"main",token:localStorage.getItem("gh_token")||""};}
+function updateStatus(){const st=$("status");if(!st)return;if(settings().token){st.textContent="Connecté à GitHub";st.classList.add("ok");}else{st.textContent="Non connecté à GitHub";st.classList.remove("ok");}}
+function loadSettings(){const s=settings();if($("repoOwner"))$("repoOwner").value=s.owner;if($("repoName"))$("repoName").value=s.repo;if($("repoBranch"))$("repoBranch").value=s.branch;if($("githubToken"))$("githubToken").value=s.token;updateStatus();}
+function saveSettings(){localStorage.setItem("gh_owner",$("repoOwner").value.trim());localStorage.setItem("gh_repo",$("repoName").value.trim());localStorage.setItem("gh_branch",$("repoBranch").value.trim());localStorage.setItem("gh_token",$("githubToken").value.trim());updateStatus();alert("Paramètres enregistrés.");}
+function clearToken(){localStorage.removeItem("gh_token");loadSettings();}
+async function gh(path,options={}){const s=settings();if(!s.token)throw new Error("Token GitHub manquant.");const res=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}`,{...options,headers:{Authorization:`Bearer ${s.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json",...(options.headers||{})}});const txt=await res.text();if(!res.ok)throw new Error(txt||res.statusText);return txt?JSON.parse(txt):{};}
+async function testGithub(){try{await gh("content/realisations.json");alert("Connexion GitHub OK.");}catch(e){alert("Connexion impossible : "+e.message);}}
 
-async function gh(path,options={}){const s=settings(); if(!s.token)throw new Error("Token GitHub manquant."); const res=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}`,{...options,headers:{Authorization:`Bearer ${s.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json",...(options.headers||{})}}); const txt=await res.text(); if(!res.ok)throw new Error(txt||res.statusText); return txt?JSON.parse(txt):{};}
-window.testGithub=async function(){try{await gh("content/realisations.json");alert("Connexion GitHub OK.")}catch(e){alert("Connexion impossible : "+e.message)}}
+function emptyItem(){return{image:"",photos:[],title:"",category:"creations",icon:"🎨",description:"",long_description:"",details:"",dimensions:"",duration:"",featured:false,draft:true,date:""};}
+function normalizeItem(item){const d=item.description_section||{},im=item.images_section||{},inf=item.infos_section||{};const cat=item.category||d.category||"creations";return{image:item.image||im.image||"",photos:item.photos||im.photos||[],title:item.title||d.title||"",category:cat,icon:categoryIcon(cat),description:item.description||d.description||"",long_description:item.long_description||d.long_description||"",details:item.details||inf.details||"",dimensions:item.dimensions||inf.dimensions||"",duration:item.duration||inf.duration||"",featured:item.featured??inf.featured??false,draft:item.draft??false,date:item.date||inf.date||""};}
+async function loadSiteData(){try{const live=await fetch("/content/realisations.json?ts="+Date.now(),{cache:"no-store"}).then(r=>r.json());data.body=(live.body||[]).map(normalizeItem);}catch(e){data.body=[];}selected=data.body.length?0:-1;render();}
+function syncIcon(){const ic=categoryIcon($("category")?.value||"creations");if($("icon"))$("icon").value=ic;if($("autoIcon"))$("autoIcon").textContent=ic;}
+function saveForm(){if(selected<0)return;const it=data.body[selected];["image","title","description","long_description","details","dimensions","duration"].forEach(id=>{if($(id))it[id]=$(id).value.trim();});it.category=$("category")?.value||"creations";it.icon=categoryIcon(it.category);it.featured=!!$("featured")?.checked;it.draft=!!$("draft")?.checked;it.date=$("date")?.value||"";it.photos=$$(".photo-row").map(row=>({photo:row.querySelector(".photo-path")?.value.trim()||"",caption:row.querySelector(".photo-caption")?.value.trim()||""})).filter(p=>p.photo);}
+function loadForm(){if(selected<0){if($("formTitle"))$("formTitle").textContent="Aucune réalisation";return;}const it=data.body[selected];$("formTitle").textContent=it.title||"Nouvelle réalisation";["image","title","description","long_description","details","dimensions","duration"].forEach(id=>{if($(id))$(id).value=it[id]||"";});$("category").value=it.category||"creations";syncIcon();$("featured").checked=!!it.featured;$("draft").checked=!!it.draft;$("date").value=(it.date||"").slice(0,10);$("mainPreview").src=it.image||"/assets/logo.png";$("photos").innerHTML="";(it.photos||[]).forEach(addPhotoRow);}
+function addPhotoRow(photo={photo:"",caption:""}){if(!$("photos"))return;const row=document.createElement("div");row.className="photo-row";row.innerHTML=`<img src="${esc(photo.photo||'/assets/logo.png')}"><input class="photo-path" placeholder="/assets/uploads/photo.jpg" value="${esc(photo.photo||"")}"><input class="photo-caption" placeholder="Légende" value="${esc(photo.caption||"")}"><button type="button">⭐</button><button type="button">↑</button><button type="button">↓</button><button type="button">×</button>`;const b=row.querySelectorAll("button");row.querySelector("img").ondblclick=()=>openImageModal(row.querySelector("img").src);b[0].onclick=()=>{saveForm();const path=row.querySelector(".photo-path").value;const cur=$("image").value;$("image").value=path;row.querySelector(".photo-path").value=cur;$("mainPreview").src=path||"/assets/logo.png";saveForm();render();};b[1].onclick=()=>{if(row.previousElementSibling)$("photos").insertBefore(row,row.previousElementSibling);};b[2].onclick=()=>{if(row.nextElementSibling)$("photos").insertBefore(row.nextElementSibling,row);};b[3].onclick=()=>row.remove();$("photos").appendChild(row);}
+function visibleByFilter(it){if(currentListFilter==="all")return true;if(currentListFilter==="active")return !it.draft;if(currentListFilter==="draft")return !!it.draft;if(currentListFilter==="featured")return !!it.featured&&!it.draft;return true;}
+function setFilter(f){currentListFilter=f;$$(".filterPill").forEach(b=>b.classList.toggle("active",b.dataset.filter===f));renderList();}
+function renderList(){const list=$("list");if(!list)return;const q=($("searchList")?.value||"").toLowerCase();const rows=data.body.map((it,i)=>({it,i})).filter(x=>visibleByFilter(x.it)).filter(x=>!q||(x.it.title+" "+x.it.description+" "+x.it.category).toLowerCase().includes(q));list.innerHTML=rows.length?rows.map(({it,i})=>`<div class="item ${i===selected?'active':''} ${it.draft?'draft':''}" onclick="selectItem(${i})"><img src="${it.image||'/assets/logo.png'}"><div><strong>${categoryIcon(it.category)} ${esc(it.title||'Nouvelle réalisation')}</strong><small><span class="catBadge">${categoryLabel(it.category)}</span> • ${(it.photos||[]).length+1} photo(s)${it.featured?' • À la une':''}${it.draft?' • Brouillon':''}</small></div></div>`).join(""):`<div class="emptyList">Aucune réalisation dans ce filtre.</div>`;}
+function selectItem(i){saveForm();selected=i;render();}
+function stats(){if($("countTotal"))$("countTotal").textContent=data.body.length;if($("countFeatured"))$("countFeatured").textContent=data.body.filter(x=>x.featured&&!x.draft).length;if($("countPhotos"))$("countPhotos").textContent=data.body.reduce((n,x)=>n+(x.image?1:0)+(x.photos||[]).length,0);if($("countDrafts"))$("countDrafts").textContent=data.body.filter(x=>x.draft).length;}
+function render(){renderList();loadForm();stats();}
+function newItem(){saveForm();data.body.push(emptyItem());selected=data.body.length-1;setFilter("draft");render();showView("realisations");}
+function duplicateItem(){if(selected<0)return;saveForm();const copy=JSON.parse(JSON.stringify(data.body[selected]));copy.title=(copy.title||"Réalisation")+" - copie";copy.draft=true;data.body.splice(selected+1,0,copy);selected++;setFilter("draft");render();}
+function archiveSelected(){if(selected<0)return;data.body[selected].draft=true;setFilter("active");render();alert("Réalisation archivée.");}
+function restoreSelected(){if(selected<0)return;data.body[selected].draft=false;setFilter("active");render();alert("Réalisation réactivée.");}
+function deleteItem(){if(selected<0)return;if(!confirm("Supprimer définitivement cette réalisation ?"))return;data.body.splice(selected,1);selected=data.body.length?Math.max(0,selected-1):-1;render();}
 
-function emptyItem(){return{image:"",photos:[],title:"",category:"creations",icon:"🎨",description:"",long_description:"",details:"",dimensions:"",duration:"",featured:false,draft:true,date:""}}
-function normalizeItem(item){const d=item.description_section||{}, im=item.images_section||{}, inf=item.infos_section||{}; const cat=item.category||d.category||"creations"; return{image:item.image||im.image||"",photos:item.photos||im.photos||[],title:item.title||d.title||"",category:cat,icon:categoryIcon(cat),description:item.description||d.description||"",long_description:item.long_description||d.long_description||"",details:item.details||inf.details||"",dimensions:item.dimensions||inf.dimensions||"",duration:item.duration||inf.duration||"",featured:item.featured??inf.featured??false,draft:item.draft??false,date:item.date||inf.date||""}}
-async function loadSiteData(){try{const live=await fetch("/content/realisations.json?ts="+Date.now()).then(r=>r.json());data.body=(live.body||[]).map(normalizeItem)}catch(e){data.body=[]}selected=data.body.length?0:-1;render()}
+function emptyNews(){return{title:"",date:new Date().toISOString().slice(0,10),excerpt:"",image:"/assets/logo.png"};}
+function normalizeNews(n){return{title:n.title||"",date:(n.date||"").slice(0,10),excerpt:n.excerpt||n.text||n.description||"",image:n.image||"/assets/logo.png"};}
+async function loadNewsData(){try{const live=await fetch("/content/actualites.json?ts="+Date.now(),{cache:"no-store"}).then(r=>r.json());newsData.body=(live.body||live.actualites||[]).map(normalizeNews);}catch(e){newsData.body=[];}selectedNews=newsData.body.length?0:-1;renderNews();}
+function saveNewsForm(){if(selectedNews<0)return;const n=newsData.body[selectedNews];n.title=$("newsTitle")?.value.trim()||"";n.date=$("newsDate")?.value||"";n.excerpt=$("newsExcerpt")?.value.trim()||"";n.image=$("newsImage")?.value.trim()||"/assets/logo.png";}
+function loadNewsForm(){if(selectedNews<0){if($("newsFormTitle"))$("newsFormTitle").textContent="Aucune actualité";return;}const n=newsData.body[selectedNews];$("newsFormTitle").textContent=n.title||"Nouvelle actualité";$("newsTitle").value=n.title||"";$("newsDate").value=(n.date||"").slice(0,10);$("newsExcerpt").value=n.excerpt||"";$("newsImage").value=n.image||"/assets/logo.png";$("newsPreview").src=n.image||"/assets/logo.png";}
+function renderNewsList(){const list=$("newsList");if(!list)return;const q=($("searchNews")?.value||"").toLowerCase();const rows=newsData.body.map((item,i)=>({item,i})).filter(x=>!q||(x.item.title+" "+x.item.excerpt).toLowerCase().includes(q));list.innerHTML=rows.length?rows.map(({item,i})=>`<div class="item ${i===selectedNews?'active':''}" onclick="selectNews(${i})"><img src="${item.image||'/assets/logo.png'}"><div><strong>📰 ${esc(item.title||'Nouvelle actualité')}</strong><small>${item.date||'Sans date'}</small></div></div>`).join(""):`<div class="emptyList">Aucune actualité.</div>`;}
+function renderNews(){renderNewsList();loadNewsForm();}
+function selectNews(i){saveNewsForm();selectedNews=i;renderNews();}
+function newNews(){saveNewsForm();newsData.body.unshift(emptyNews());selectedNews=0;showView("actualites");renderNews();}
+function deleteNews(){if(selectedNews<0)return;if(!confirm("Supprimer cette actualité ?"))return;newsData.body.splice(selectedNews,1);selectedNews=newsData.body.length?Math.max(0,selectedNews-1):-1;renderNews();}
+function cleanNewsData(){return{body:newsData.body.map(normalizeNews).filter(n=>n.title||n.excerpt).sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))};}
 
-window.syncIcon=function(){const ic=categoryIcon($("category")?.value||"creations");if($("icon"))$("icon").value=ic;if($("autoIcon"))$("autoIcon").textContent=ic}
-window.saveForm=function(){if(selected<0)return;const it=data.body[selected];["image","title","description","long_description","details","dimensions","duration"].forEach(id=>{if($(id))it[id]=$(id).value.trim()});it.category=$("category")?.value||"creations";it.icon=categoryIcon(it.category);it.featured=!!$("featured")?.checked;it.draft=!!$("draft")?.checked;it.date=$("date")?.value||"";it.photos=$$(".photo-row").map(row=>({photo:row.querySelector(".photo-path")?.value.trim()||"",caption:row.querySelector(".photo-caption")?.value.trim()||""})).filter(p=>p.photo)}
-function loadForm(){if(selected<0){if($("formTitle"))$("formTitle").textContent="Aucune réalisation";return}const it=data.body[selected];$("formTitle").textContent=it.title||"Nouvelle réalisation";["image","title","description","long_description","details","dimensions","duration"].forEach(id=>{if($(id))$(id).value=it[id]||""});$("category").value=it.category||"creations";syncIcon();$("featured").checked=!!it.featured;$("draft").checked=!!it.draft;$("date").value=(it.date||"").slice(0,10);$("mainPreview").src=it.image||"/assets/logo.png";$("photos").innerHTML="";(it.photos||[]).forEach(addPhotoRow)}
-window.addPhotoRow=function(photo={photo:"",caption:""}){const row=document.createElement("div");row.className="photo-row";row.innerHTML=`<img src="${esc(photo.photo||'/assets/logo.png')}"><input class="photo-path" placeholder="/assets/uploads/photo.jpg" value="${esc(photo.photo||"")}"><input class="photo-caption" placeholder="Légende" value="${esc(photo.caption||"")}"><button type="button">⭐</button><button type="button">↑</button><button type="button">↓</button><button type="button">×</button>`;const b=row.querySelectorAll("button");row.querySelector("img").ondblclick=()=>openImageModal(row.querySelector("img").src);b[0].onclick=()=>{saveForm();const path=row.querySelector(".photo-path").value;const cur=$("image").value;$("image").value=path;row.querySelector(".photo-path").value=cur;$("mainPreview").src=path||"/assets/logo.png";saveForm();render()};b[1].onclick=()=>{if(row.previousElementSibling)$("photos").insertBefore(row,row.previousElementSibling)};b[2].onclick=()=>{if(row.nextElementSibling)$("photos").insertBefore(row.nextElementSibling,row)};b[3].onclick=()=>row.remove();$("photos").appendChild(row)}
+function emptyReview(){return{name:"",rating:5,date:new Date().toISOString().slice(0,10),text:""};}
+function normalizeReview(r){return{name:r.name||"",rating:Math.max(1,Math.min(5,Number(r.rating)||5)),date:(r.date||"").slice(0,10),text:r.text||r.comment||""};}
+async function loadReviewsData(){try{const live=await fetch("/content/avis.json?ts="+Date.now(),{cache:"no-store"}).then(r=>r.json());reviewsData.body=(live.body||live.avis||[]).map(normalizeReview);}catch(e){reviewsData.body=[];}selectedReview=reviewsData.body.length?0:-1;renderReviews();}
+function saveReviewForm(){if(selectedReview<0)return;const r=reviewsData.body[selectedReview];r.name=$("reviewName")?.value.trim()||"";r.rating=Number($("reviewRating")?.value)||5;r.date=$("reviewDate")?.value||"";r.text=$("reviewText")?.value.trim()||"";}
+function loadReviewForm(){if(selectedReview<0){if($("reviewFormTitle"))$("reviewFormTitle").textContent="Aucun avis";return;}const r=reviewsData.body[selectedReview];$("reviewFormTitle").textContent=r.name||"Nouvel avis";$("reviewName").value=r.name||"";$("reviewRating").value=String(r.rating||5);$("reviewDate").value=(r.date||"").slice(0,10);$("reviewText").value=r.text||"";}
+function renderReviewsList(){const list=$("reviewsList");if(!list)return;const q=($("searchReviews")?.value||"").toLowerCase();const rows=reviewsData.body.map((item,i)=>({item,i})).filter(x=>!q||(x.item.name+" "+x.item.text).toLowerCase().includes(q));list.innerHTML=rows.length?rows.map(({item,i})=>`<div class="reviewItem ${i===selectedReview?'active':''}" onclick="selectReview(${i})"><strong>${"⭐".repeat(item.rating)} ${esc(item.name||'Client')}</strong><small>${item.date||'Sans date'}</small><p>${esc(item.text||"")}</p></div>`).join(""):`<div class="emptyList">Aucun avis.</div>`;}
+function renderReviews(){renderReviewsList();loadReviewForm();}
+function selectReview(i){saveReviewForm();selectedReview=i;renderReviews();}
+function newReview(){saveReviewForm();reviewsData.body.unshift(emptyReview());selectedReview=0;showView("avis");renderReviews();}
+function deleteReview(){if(selectedReview<0)return;if(!confirm("Supprimer cet avis ?"))return;reviewsData.body.splice(selectedReview,1);selectedReview=reviewsData.body.length?Math.max(0,selectedReview-1):-1;renderReviews();}
+function cleanReviewsData(){return{body:reviewsData.body.map(normalizeReview).filter(r=>r.name||r.text).sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))};}
 
-function visibleByFilter(it){if(currentListFilter==="all")return true;if(currentListFilter==="active")return !it.draft;if(currentListFilter==="draft")return !!it.draft;if(currentListFilter==="featured")return !!it.featured&&!it.draft;return true}
-window.setFilter=function(f){currentListFilter=f;$$(".filterPill").forEach(b=>b.classList.toggle("active",b.dataset.filter===f));renderList()}
-window.renderList=function(){const q=($("searchList")?.value||"").toLowerCase();const rows=data.body.map((it,i)=>({it,i})).filter(x=>visibleByFilter(x.it)).filter(x=>!q||(x.it.title+" "+x.it.description+" "+x.it.category).toLowerCase().includes(q));$("list").innerHTML=rows.length?rows.map(({it,i})=>`<div class="item ${i===selected?'active':''} ${it.draft?'draft':''}" onclick="selectItem(${i})"><img src="${it.image||'/assets/logo.png'}"><div><strong>${categoryIcon(it.category)} ${esc(it.title||'Nouvelle réalisation')}</strong><small><span class="catBadge">${categoryLabel(it.category)}</span> • ${(it.photos||[]).length+1} photo(s)${it.featured?' • À la une':''}${it.draft?' • Brouillon':''}</small></div></div>`).join(""):`<div class="emptyList">Aucune réalisation dans ce filtre.</div>`}
-window.selectItem=function(i){saveForm();selected=i;render()}
-function stats(){if($("countTotal"))$("countTotal").textContent=data.body.length;if($("countFeatured"))$("countFeatured").textContent=data.body.filter(x=>x.featured&&!x.draft).length;if($("countPhotos"))$("countPhotos").textContent=data.body.reduce((n,x)=>n+1+(x.photos||[]).length,0);if($("countDrafts"))$("countDrafts").textContent=data.body.filter(x=>x.draft).length}
-window.render=function(){renderList();loadForm();stats()}
+function toBase64Utf8(str){return btoa(unescape(encodeURIComponent(str)));}
+async function putTextFile(path,text,message){const current=await gh(path).catch(()=>null);const payload={message,content:toBase64Utf8(text),branch:settings().branch};if(current?.sha)payload.sha=current.sha;await gh(path,{method:"PUT",body:JSON.stringify(payload)});}
+async function putJsonFile(path,obj,message){await putTextFile(path,JSON.stringify(obj,null,2),message);}
 
-window.newItem=function(){saveForm();data.body.push(emptyItem());selected=data.body.length-1;setFilter("draft");render();showView("realisations")}
-window.duplicateItem=function(){if(selected<0)return;saveForm();const copy=JSON.parse(JSON.stringify(data.body[selected]));copy.title=(copy.title||"Réalisation")+" - copie";copy.draft=true;data.body.splice(selected+1,0,copy);selected++;setFilter("draft");render()}
-window.archiveSelected=function(){if(selected<0)return;data.body[selected].draft=true;setFilter("active");render();alert("Réalisation archivée.")}
-window.restoreSelected=function(){if(selected<0)return;data.body[selected].draft=false;setFilter("active");render();alert("Réalisation réactivée.")}
-window.deleteItem=function(){if(selected<0)return;if(!confirm("Supprimer définitivement cette réalisation ?"))return;data.body.splice(selected,1);selected=data.body.length?Math.max(0,selected-1):-1;render()}
+const STATIC_PAGES=["","services/","galerie/","devis/","contact/","faq/","avis/","actualites/","reparation-gsm-mouscron/","reparation-gsm-tournai/","reparation-petit-electromenager-mouscron/","reparation-petit-electromenager-tournai/","impression-3d-mouscron/","impression-3d-tournai/","gravure-laser-mouscron/","gravure-laser-tournai/","decoupe-laser-mouscron/","decoupe-laser-tournai/"];
+function buildSitemap(){const lines=['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'];STATIC_PAGES.forEach((p,i)=>lines.push(`<url><loc>${SITE_URL}/${p}</loc><changefreq>weekly</changefreq><priority>${i===0?'1.0':i<3?'0.9':'0.8'}</priority></url>`));lines.push("</urlset>");return lines.join("\n");}
+function absoluteImage(src){if(!src)return"";return src.startsWith("http")?src:SITE_URL+(src.startsWith("/")?src:"/"+src);}
+function buildImageSitemap(){const lines=['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'];const projects=data.body.filter(r=>!r.draft);projects.forEach(r=>{const images=[{photo:r.image,caption:r.title},...(r.photos||[])].filter(x=>x.photo);if(!images.length)return;lines.push(`<url><loc>${SITE_URL}/galerie/</loc>`);images.forEach(img=>lines.push(`<image:image><image:loc>${xmlEsc(absoluteImage(img.photo))}</image:loc><image:title>${xmlEsc(img.caption||r.title||"Réalisation")}</image:title></image:image>`));lines.push("</url>");});newsData.body.filter(n=>n.image).forEach(n=>lines.push(`<url><loc>${SITE_URL}/actualites/</loc><image:image><image:loc>${xmlEsc(absoluteImage(n.image))}</image:loc><image:title>${xmlEsc(n.title||"Actualité")}</image:title></image:image></url>`));lines.push("</urlset>");return lines.join("\n");}
+function buildRobots(){return`User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\nSitemap: ${SITE_URL}/image-sitemap.xml\n`;}
+async function publishSeoFiles(){try{await putTextFile("sitemap.xml",buildSitemap(),"Mise à jour sitemap V14");await putTextFile("image-sitemap.xml",buildImageSitemap(),"Mise à jour sitemap images V14");await putTextFile("robots.txt",buildRobots(),"Mise à jour robots V14");alert("Fichiers SEO publiés. Cloudflare va redéployer le site.");runSeoChecks();}catch(e){alert("Erreur SEO : "+e.message);}}
+async function publish(){const btn=$("publishBtn");try{saveForm();saveNewsForm();saveReviewForm();for(const r of data.body){if(!r.draft&&(!r.title||!r.image))throw new Error("Une réalisation publiée doit avoir un titre et une image principale.");}btn.disabled=true;btn.textContent="Publication...";await putJsonFile("content/realisations.json",{body:data.body.map(normalizeItem)},"Publication réalisations V14");await putJsonFile("content/actualites.json",cleanNewsData(),"Publication actualités V14");await putJsonFile("content/avis.json",cleanReviewsData(),"Publication avis V14");await putTextFile("sitemap.xml",buildSitemap(),"Mise à jour sitemap V14");await putTextFile("image-sitemap.xml",buildImageSitemap(),"Mise à jour sitemap images V14");await putTextFile("robots.txt",buildRobots(),"Mise à jour robots V14");alert("Publication complète envoyée sur GitHub. Cloudflare va redéployer le site.");}catch(e){alert("Erreur publication : "+e.message);}finally{btn.disabled=false;btn.textContent="🚀 Publier";}}
 
-function toBase64Utf8(str){return btoa(unescape(encodeURIComponent(str)))}
-function cleanData(){return{body:data.body.filter(x=>!x.draft).map(normalizeItem)}}
-window.publish=async function(){try{saveForm();for(const r of data.body){if(!r.draft&&(!r.title||!r.image))throw new Error("Une réalisation publiée doit avoir un titre et une image principale.")}const btn=$("publishBtn");btn.disabled=true;btn.textContent="Publication...";const current=await gh("content/realisations.json");const content=toBase64Utf8(JSON.stringify(cleanData(),null,2));await gh("content/realisations.json",{method:"PUT",body:JSON.stringify({message:"Publication depuis le back-office V11.1",content,sha:current.sha,branch:settings().branch})});await forcePublishActualitesV132();
-alert("Publication envoyée sur GitHub. Cloudflare va redéployer le site automatiquement.")}catch(e){alert("Erreur publication : "+e.message)}finally{$("publishBtn").disabled=false;$("publishBtn").textContent="🚀 Publier"}}
-function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=reject;r.readAsDataURL(file)})}
-function safeName(name){return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9.]+/g,"-").replace(/-+/g,"-")}
-async function uploadFile(file){const filename=Date.now()+"-"+safeName(file.name);const path="assets/uploads/"+filename;const content=await fileToBase64(file);await gh(path,{method:"PUT",body:JSON.stringify({message:"Ajout image "+filename,content,branch:settings().branch})});return "/"+path}
-window.uploadMain=async function(){try{const f=$("mainUpload").files[0];if(!f)return alert("Choisis une image.");const path=await uploadFile(f);$("image").value=path;$("mainPreview").src=path;saveForm();render();alert("Image envoyée.")}catch(e){alert("Erreur upload : "+e.message)}}
-window.uploadExtra=async function(){try{const files=[...$("extraUpload").files];if(!files.length)return alert("Choisis une ou plusieurs images.");for(const f of files){const path=await uploadFile(f);addPhotoRow({photo:path,caption:""})}saveForm();render();alert("Photos envoyées.")}catch(e){alert("Erreur upload : "+e.message)}}
-window.suggestText=function(){const t=$("title").value.trim()||"Cette réalisation";const cat=$("category").value;const map={impression3d:"Pièce réalisée en impression 3D, adaptée au besoin et préparée sur mesure.",reparations:"Diagnostic et remise en état selon la faisabilité de la réparation.",laser:"Personnalisation réalisée par gravure ou découpe laser.",decoupe:"Découpe laser réalisée sur mesure à partir du projet demandé.",creations:"Création personnalisée réalisée selon la demande."};if(!$("description").value)$("description").value=map[cat];if(!$("long_description").value)$("long_description").value=t+" : "+map[cat]}
-window.openImageModal=function(src){$("modalImage").src=src;$("imageModal").classList.add("open")}
-window.closeImageModal=function(){$("imageModal").classList.remove("open")}
+function seoSet(id,textId,ok,text){const dot=$(id),label=$(textId);if(dot){dot.className="seoDot "+(ok?"ok":"bad");dot.textContent=ok?"✓":"×";}if(label)label.textContent=text;}
+async function checkUrl(path,contains){try{const r=await fetch(path+"?ts="+Date.now(),{cache:"no-store"});const t=await r.text();return r.ok&&(!contains||t.includes(contains));}catch(e){return false;}}
+async function runSeoChecks(){seoSet("seoRobotsStatus","seoRobotsText",await checkUrl("/robots.txt","Sitemap:"),"Accessible");seoSet("seoSitemapStatus","seoSitemapText",await checkUrl("/sitemap.xml","<urlset"),"Accessible et lisible");seoSet("seoImageSitemapStatus","seoImageSitemapText",await checkUrl("/image-sitemap.xml","image-sitemap")||await checkUrl("/image-sitemap.xml","xmlns:image"),"Accessible et lisible");seoSet("seoGoogleStatus","seoGoogleText",await checkUrl("/","google-site-verification"),"Balise présente sur l’accueil");}
 
-document.addEventListener("DOMContentLoaded",()=>{loadSettings();loadSiteData()});
+function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=reject;r.readAsDataURL(file);});}
+function safeName(name){return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9.]+/g,"-").replace(/-+/g,"-");}
+async function uploadFile(file){const filename=Date.now()+"-"+safeName(file.name);const path="assets/uploads/"+filename;const content=await fileToBase64(file);await gh(path,{method:"PUT",body:JSON.stringify({message:"Ajout image "+filename,content,branch:settings().branch})});return"/"+path;}
+async function uploadMain(){try{const f=$("mainUpload").files[0];if(!f)return alert("Choisis une image.");const path=await uploadFile(f);$("image").value=path;$("mainPreview").src=path;saveForm();render();alert("Image envoyée.");}catch(e){alert("Erreur upload : "+e.message);}}
+async function uploadExtra(){try{const files=[...$("extraUpload").files];if(!files.length)return alert("Choisis une ou plusieurs images.");for(const f of files){const path=await uploadFile(f);addPhotoRow({photo:path,caption:""});}saveForm();render();alert("Photos envoyées.");}catch(e){alert("Erreur upload : "+e.message);}}
+function suggestText(){const t=$("title").value.trim()||"Cette réalisation";const cat=$("category").value;const map={impression3d:"Pièce réalisée en impression 3D, adaptée au besoin et préparée sur mesure.",reparations:"Diagnostic et remise en état selon la faisabilité de la réparation.",laser:"Personnalisation réalisée par gravure laser.",decoupe:"Découpe laser réalisée sur mesure à partir du projet demandé.",creations:"Création personnalisée réalisée selon la demande."};if(!$("description").value)$("description").value=map[cat];if(!$("long_description").value)$("long_description").value=t+" : "+map[cat];}
+function openImageModal(src){$("modalImage").src=src;$("imageModal").classList.add("open");}
+function closeImageModal(){$("imageModal").classList.remove("open");}
 
+function exportDataBackup(){saveForm();saveNewsForm();saveReviewForm();const backup={created_at:new Date().toISOString(),type:"lucky-reparations-creations-v14-backup",realisations:data.body,actualites:newsData.body,avis:reviewsData.body};const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="sauvegarde-complete-lucky-v14.json";a.click();URL.revokeObjectURL(a.href);}
+function restoreDataBackup(event){const file=event.target.files?.[0];if(!file)return;if(!confirm("Restaurer cette sauvegarde dans le back-office ?"))return;const reader=new FileReader();reader.onload=()=>{try{const restored=JSON.parse(reader.result);data.body=(restored.realisations||restored.body||[]).map(normalizeItem);newsData.body=(restored.actualites||[]).map(normalizeNews);reviewsData.body=(restored.avis||[]).map(normalizeReview);selected=data.body.length?0:-1;selectedNews=newsData.body.length?0:-1;selectedReview=reviewsData.body.length?0:-1;render();renderNews();renderReviews();alert("Sauvegarde restaurée localement. Clique sur Publier.");}catch(e){alert("Erreur restauration : "+e.message);}};reader.readAsText(file);}
 
-// V13 — Sauvegarde/restauration des données de créations
-window.exportDataBackup = function(){
-  try{
-    if(typeof saveForm === "function") saveForm();
-    const backup = {
-      created_at: new Date().toISOString(),
-      type: "lucky-reparations-creations-backup",
-      body: Array.isArray(data?.body) ? data.body : []
-    };
-    const blob = new Blob([JSON.stringify(backup, null, 2)], {type:"application/json"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "sauvegarde-realisations-lucky.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
-  }catch(e){
-    alert("Erreur sauvegarde : " + e.message);
-  }
-};
+Object.assign(window,{saveSettings,clearToken,testGithub,setFilter,renderList,selectItem,newItem,duplicateItem,archiveSelected,restoreSelected,deleteItem,addPhotoRow,uploadMain,uploadExtra,suggestText,openImageModal,closeImageModal,publish,exportDataBackup,restoreDataBackup,newNews,selectNews,deleteNews,loadNewsData,renderNewsList,newReview,selectReview,deleteReview,loadReviewsData,renderReviewsList,runSeoChecks,publishSeoFiles});
 
-window.restoreDataBackup = function(event){
-  const file = event.target.files && event.target.files[0];
-  if(!file) return;
-  if(!confirm("Restaurer cette sauvegarde dans le back-office ? Pense ensuite à cliquer sur Publier.")) return;
-  const reader = new FileReader();
-  reader.onload = function(){
-    try{
-      const restored = JSON.parse(reader.result);
-      const body = restored.body || restored.realisations || restored;
-      if(!Array.isArray(body)) throw new Error("Format de sauvegarde non reconnu.");
-      data.body = body.map(typeof normalizeItem === "function" ? normalizeItem : x => x);
-      selected = data.body.length ? 0 : -1;
-      if(typeof render === "function") render();
-      alert("Sauvegarde restaurée dans le back-office. Clique sur Publier pour l'envoyer sur GitHub.");
-    }catch(e){
-      alert("Erreur restauration : " + e.message);
-    }
-  };
-  reader.readAsText(file);
-};
-
-
-/* V13.1 — Module Actualités */
-let newsData = { body: [] };
-let selectedNews = -1;
-
-function emptyNews(){
-  return {
-    title: "",
-    date: new Date().toISOString().slice(0,10),
-    excerpt: "",
-    image: "/assets/logo.png"
-  };
-}
-
-function normalizeNews(item){
-  return {
-    title: item.title || "",
-    date: (item.date || "").slice(0,10),
-    excerpt: item.excerpt || item.text || item.description || "",
-    image: item.image || "/assets/logo.png"
-  };
-}
-
-async function loadNewsData(){
-  try{
-    const live = await fetch("/content/actualites.json?ts=" + Date.now()).then(r => r.json());
-    newsData.body = (live.body || live.actualites || []).map(normalizeNews);
-  }catch(e){
-    newsData.body = [];
-  }
-  selectedNews = newsData.body.length ? 0 : -1;
-  renderNews();
-}
-
-function saveNewsForm(){
-  if(selectedNews < 0) return;
-  const item = newsData.body[selectedNews];
-  item.title = document.getElementById("newsTitle")?.value.trim() || "";
-  item.date = document.getElementById("newsDate")?.value || "";
-  item.excerpt = document.getElementById("newsExcerpt")?.value.trim() || "";
-  item.image = document.getElementById("newsImage")?.value.trim() || "/assets/logo.png";
-}
-
-function loadNewsForm(){
-  const title = document.getElementById("newsFormTitle");
-  if(selectedNews < 0){
-    if(title) title.textContent = "Aucune actualité";
-    return;
-  }
-  const item = newsData.body[selectedNews];
-  if(title) title.textContent = item.title || "Nouvelle actualité";
-  if(document.getElementById("newsTitle")) document.getElementById("newsTitle").value = item.title || "";
-  if(document.getElementById("newsDate")) document.getElementById("newsDate").value = (item.date || "").slice(0,10);
-  if(document.getElementById("newsExcerpt")) document.getElementById("newsExcerpt").value = item.excerpt || "";
-  if(document.getElementById("newsImage")) document.getElementById("newsImage").value = item.image || "/assets/logo.png";
-  if(document.getElementById("newsPreview")) document.getElementById("newsPreview").src = item.image || "/assets/logo.png";
-}
-
-function renderNewsList(){
-  const list = document.getElementById("newsList");
-  if(!list) return;
-  const q = (document.getElementById("searchNews")?.value || "").toLowerCase();
-  const rows = newsData.body
-    .map((item, i) => ({item, i}))
-    .filter(x => !q || (x.item.title + " " + x.item.excerpt).toLowerCase().includes(q));
-
-  list.innerHTML = rows.length ? rows.map(({item, i}) => `
-    <div class="item ${i === selectedNews ? "active" : ""}" onclick="selectNews(${i})">
-      <img src="${item.image || "/assets/logo.png"}">
-      <div>
-        <strong>📰 ${esc(item.title || "Nouvelle actualité")}</strong>
-        <small>${item.date || "Sans date"}</small>
-      </div>
-    </div>
-  `).join("") : `<div class="emptyList">Aucune actualité.</div>`;
-}
-
-function renderNews(){
-  renderNewsList();
-  loadNewsForm();
-}
-
-function selectNews(i){
-  saveNewsForm();
-  selectedNews = i;
-  renderNews();
-}
-
-function newNews(){
-  saveNewsForm();
-  newsData.body.unshift(emptyNews());
-  selectedNews = 0;
-  if(typeof showView === "function") showView("actualites");
-  renderNews();
-}
-
-function deleteNews(){
-  if(selectedNews < 0) return;
-  if(!confirm("Supprimer cette actualité ?")) return;
-  newsData.body.splice(selectedNews, 1);
-  selectedNews = newsData.body.length ? Math.max(0, selectedNews - 1) : -1;
-  renderNews();
-}
-
-function cleanNewsData(){
-  return {
-    body: newsData.body
-      .map(normalizeNews)
-      .filter(n => n.title || n.excerpt)
-      .sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0))
-  };
-}
-
-
-document.addEventListener("DOMContentLoaded", function(){
-  if(typeof loadNewsData === "function") loadNewsData();
-  const newsImage = document.getElementById("newsImage");
-  if(newsImage){
-    newsImage.addEventListener("input", function(){
-      const prev = document.getElementById("newsPreview");
-      if(prev) prev.src = this.value || "/assets/logo.png";
-    });
-  }
-});
-
-
-/* V13.2 — Publication fiable des actualités */
-async function forcePublishActualitesV132(){
-  if(typeof saveNewsForm === "function") saveNewsForm();
-  if(typeof cleanNewsData !== "function") return;
-  const content = toBase64Utf8(JSON.stringify(cleanNewsData(), null, 2));
-  const current = await gh("content/actualites.json").catch(() => null);
-  const payload = {
-    message: "Mise à jour des actualités depuis le back-office V13.2",
-    content: content,
-    branch: settings().branch
-  };
-  if(current && current.sha) payload.sha = current.sha;
-  await gh("content/actualites.json", {
-    method: "PUT",
-    body: JSON.stringify(payload)
-  });
-}
+document.addEventListener("DOMContentLoaded",()=>{loadSettings();loadSiteData();loadNewsData();loadReviewsData();const ni=$("newsImage");if(ni)ni.addEventListener("input",()=>{$("newsPreview").src=ni.value||"/assets/logo.png";});});

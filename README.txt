@@ -99,3 +99,13 @@ V13.2 — Correction Actualités :
 - Affichage clair si aucune actualité n'est encore publiée.
 - Publication GitHub plus fiable pour content/actualites.json.
 - Ajout d'un exemple _actualites_exemple.json sans écraser les données.
+
+
+V14 Professionnel :
+- Module Avis clients dans le back-office.
+- Module SEO avec vérification robots, sitemap, sitemap images et balise Google.
+- Publication groupée : réalisations, actualités, avis et fichiers SEO.
+- Sitemap des images généré depuis les réalisations et actualités.
+- En-têtes Cloudflare explicites pour les fichiers XML et robots.txt.
+- Sauvegarde complète réalisations + actualités + avis.
+- Toujours sans écraser content/realisations.json, content/actualites.json, content/avis.json ni assets/uploads/.

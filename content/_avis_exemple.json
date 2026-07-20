@@ -1,0 +1,10 @@
+{
+  "body": [
+    {
+      "name": "Exemple",
+      "rating": 5,
+      "date": "2026-07-01",
+      "text": "Exemple d'avis à remplacer depuis le back-office."
+    }
+  ]
+}

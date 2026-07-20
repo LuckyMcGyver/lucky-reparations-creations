@@ -1,25 +1,20 @@
-<!doctype html><html lang="fr-BE"><head>
-  <meta name="google-site-verification" content="SQKULWK04oQlZVdRZz8H2qoyJoY7vpbumgCuS6Gi54g" />
-  <meta name="author" content="Lucky Réparations & Créations">
-  <meta name="keywords" content="réparation GSM Mouscron, réparation smartphone Tournai, impression 3D Mouscron, gravure laser Tournai, petit électroménager, créations personnalisées">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="fr_BE">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#05070a"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index, follow"><link rel="icon" href="/assets/logo.png"><link rel="stylesheet" href="/style.css"><title>Avis | Lucky Réparations & Créations</title><meta name="description" content="Avis clients."><meta property="og:title" content="Avis | Lucky Réparations & Créations"><meta property="og:description" content="Avis clients."><meta property="og:image" content="https://lucky-reparations-creations.pages.dev/assets/hero.png"></head><body><header><div class="container nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="Logo"><span>Lucky Réparations & Créations<small>Mouscron • Tournai et environs</small></span></a><nav class="links" id="menu"><a href="/">Accueil</a><a href="/services/">Services</a><a href="/galerie/">Galerie</a><a href="/actualites/">Actualités</a><a href="/avis/">Avis</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a class="cta" href="/devis/">Demander un devis</a></nav><button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('open')">Menu</button></div></header><main><section class="page-hero"><div class="container"><h1>Avis clients</h1></div></section><section><div class="container grid services" id="avisGrid"></div></section></main><footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs — Réparer • Créer • Personnaliser</div></footer>
-<script src="/app.js"></script>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="google-site-verification" content="SQKULWK04oQlZVdRZz8H2qoyJoY7vpbumgCuS6Gi54g">
+<title>Avis clients | Lucky Réparations & Créations</title>
+<meta name="description" content="Avis clients sur les réparations, impressions 3D, gravures et créations de Lucky Réparations & Créations à Mouscron et Tournai.">
+<link rel="canonical" href="https://lucky-reparations-creations.pages.dev/avis/"><link rel="icon" href="/assets/logo.png"><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><div class="container nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="Logo"><span>Lucky Réparations & Créations<small>Mouscron • Tournai et environs</small></span></a><nav class="links" id="menu"><a href="/">Accueil</a><a href="/services/">Services</a><a href="/galerie/">Galerie</a><a href="/actualites/">Actualités</a><a href="/avis/">Avis</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a><a class="cta" href="/devis/">Demander un devis</a></nav><button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('open')">Menu</button></div></header>
+<main><section class="page-hero"><div class="container"><h1>Avis clients</h1><p>Retours et témoignages sur les réalisations et réparations.</p></div></section><section><div class="container grid services" id="avisGrid"><article class="card"><p>Chargement des avis...</p></article></div></section></main>
+<footer><div class="container">© 2026 Lucky Réparations & Créations — Mouscron • Tournai et environs</div></footer>
 <script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", function() {
-      const hash = window.location.hash || "";
-      if (hash.includes("invite_token=") || hash.includes("recovery_token=") || hash.includes("confirmation_token=")) {
-        window.netlifyIdentity.open();
-      }
-    });
-    window.netlifyIdentity.on("login", function() {
-      if (window.location.pathname.startsWith("/admin")) window.location.reload();
-      else window.netlifyIdentity.close();
-    });
-  }
-</script>
-</body></html>
+async function loadAvis(){
+ const grid=document.getElementById("avisGrid");
+ try{const r=await fetch("/content/avis.json?ts="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error();const j=await r.json();const items=Array.isArray(j)?j:(j.body||j.avis||[]);items.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));grid.innerHTML=items.length?items.map(a=>`<article class="card"><h3>${"$"}{"⭐".repeat(Number(a.rating)||5)}<br>${"$"}{a.name||"Client"}</h3>${"$"}{a.date?`<p><strong>${"$"}{String(a.date).slice(0,10)}</strong></p>`:""}<p>${"$"}{a.text||a.comment||""}</p></article>`).join(""):`<article class="card"><h3>Aucun avis publié</h3><p>Les prochains avis apparaîtront ici.</p></article>`;}catch(e){grid.innerHTML='<article class="card"><h3>Aucun avis publié</h3><p>Les prochains avis apparaîtront ici.</p></article>';}
+}
+document.addEventListener("DOMContentLoaded",loadAvis);
+</script></body></html>
