@@ -399,6 +399,21 @@
       "featured": false,
       "draft": false,
       "date": "2026-09-26"
+    },
+    {
+      "image": "/assets/uploads/1790697929489-img20260927123140.jpg",
+      "photos": [],
+      "title": "Assiette naissance lumineuse",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "",
+      "long_description": "Création avec prénom et informations de naissance. Module rechargeable",
+      "details": "PLA",
+      "dimensions": "200mm",
+      "duration": "2 semaines",
+      "featured": false,
+      "draft": false,
+      "date": "2026-09-29"
     }
   ]
 }
