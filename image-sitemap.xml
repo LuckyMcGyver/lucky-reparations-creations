@@ -1,9 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url>
-    <loc>https://lucky-reparations-creations.pages.dev/</loc>
-    <image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/hero.png</image:loc><image:title>Lucky Réparations &amp; Créations</image:title></image:image>
-    <image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/logo.png</image:loc><image:title>Logo Lucky Réparations &amp; Créations</image:title></image:image>
-  </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/img_20210615_103505.jpg</image:loc><image:title>Lampe cheval</image:title></image:image>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/lampe-cheval-3.jpg</image:loc><image:title>Photo complémentaire</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782893484571-carrelage-salle-de-bain.jpg</image:loc><image:title>Carrelage salle de bain</image:title></image:image>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782893539687-img20250828190624.jpg</image:loc><image:title>Carrelage salle de bain</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782893967754-img20240714201752.jpg</image:loc><image:title>Camion Scania</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782894218368-img20260625092728-10-.jpg</image:loc><image:title>Remplacement rétro-éclairage</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782894722838-img20260428110044.jpg</image:loc><image:title>Gravure sur toile</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782894975294-img20260624091421.jpg</image:loc><image:title>Reproduction de pièce</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782895179757-img-20240417-150244.jpg</image:loc><image:title>Rugby Club de Toulon</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782895546566-img-20210804-125232.jpg</image:loc><image:title>Tour Eiffel</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782895959636-a99d5c53-65b7-449e-9b2e-11641e424d53.jpeg</image:loc><image:title>Support manettes PS5</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782899743524-img-20210902-123507.jpg</image:loc><image:title>Basilique de Montmartre</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782899775172-img-20220201-103522.jpg</image:loc><image:title>Planche jeu de fer</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782899809687-img20221222000205.jpg</image:loc><image:title>Casse-noisette</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782899840823-img20230315174053.jpg</image:loc><image:title>Trophées</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782899876482-img20230613162305.jpg</image:loc><image:title>Enseigne lumineuse</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782899911418-img20230718131622.jpg</image:loc><image:title>Cadeau personnalisé</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782899927581-img20230801141023.jpg</image:loc><image:title>trompe l&apos;oeil</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900074572-img20231027114127.jpg</image:loc><image:title>Boite à capsules dolce gusto</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900107783-img20231129095158.jpg</image:loc><image:title>cadre de naissance</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900159507-img20240209095250.jpg</image:loc><image:title>Aigle vs Cobra</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900178859-img-20240517-133538.jpg</image:loc><image:title>Gravure CNC</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900209579-img20240829191236.jpg</image:loc><image:title>Dés pour jeu de carte</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900243766-img20250529114758.jpg</image:loc><image:title>Moto</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900266758-img20251221123115.jpg</image:loc><image:title>Chats</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900292689-img20260310105433.jpg</image:loc><image:title>Poudlard</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/galerie/</loc>
+<image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/uploads/1782900320289-img20260527171423.jpg</image:loc><image:title>Présentoir</image:title></image:image>
+</url>
+<url><loc>https://lucky-reparations-creations.pages.dev/actualites/</loc><image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/logo.png</image:loc><image:title>Contenu d&apos;exemples</image:title></image:image></url>
+<url><loc>https://lucky-reparations-creations.pages.dev/actualites/</loc><image:image><image:loc>https://lucky-reparations-creations.pages.dev/assets/logo.png</image:loc><image:title>Bienvenue sur le site Lucky Réparations &amp; Créations</image:title></image:image></url>
 </urlset>
