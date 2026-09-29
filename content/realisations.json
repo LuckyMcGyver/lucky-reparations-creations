@@ -397,7 +397,7 @@
       "dimensions": "300mm",
       "duration": "2 jours",
       "featured": false,
-      "draft": true,
+      "draft": false,
       "date": "2026-09-26"
     }
   ]
