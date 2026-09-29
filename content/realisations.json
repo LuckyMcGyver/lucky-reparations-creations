@@ -384,6 +384,21 @@
       "featured": false,
       "draft": false,
       "date": ""
+    },
+    {
+      "image": "/assets/uploads/1790697384866-mandala-kaycie.png",
+      "photos": [],
+      "title": "Mandala de ma petite fille",
+      "category": "creations",
+      "icon": "🎨",
+      "description": "Gravure et découpe laser",
+      "long_description": "",
+      "details": "MDF",
+      "dimensions": "300mm",
+      "duration": "2 jours",
+      "featured": false,
+      "draft": true,
+      "date": "2026-09-26"
     }
   ]
 }
