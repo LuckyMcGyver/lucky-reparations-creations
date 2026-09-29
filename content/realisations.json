@@ -414,6 +414,21 @@
       "featured": false,
       "draft": false,
       "date": "2026-09-29"
+    },
+    {
+      "image": "/assets/uploads/1790698981894-img20260923155107.jpg",
+      "photos": [],
+      "title": "Mandala",
+      "category": "decoupe",
+      "icon": "✂️",
+      "description": "Gravure et découpe Laser",
+      "long_description": "",
+      "details": "MDF",
+      "dimensions": "300mm x 200mm",
+      "duration": "2 semaines",
+      "featured": false,
+      "draft": false,
+      "date": "2026-09-14"
     }
   ]
 }
