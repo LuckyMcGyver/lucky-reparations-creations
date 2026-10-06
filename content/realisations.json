@@ -396,7 +396,7 @@
       "details": "MDF",
       "dimensions": "300mm",
       "duration": "2 jours",
-      "featured": false,
+      "featured": true,
       "draft": false,
       "date": "2026-09-26"
     },
